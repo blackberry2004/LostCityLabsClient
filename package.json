@@ -1,0 +1,63 @@
+{
+  "name": "nopazaz-kit",
+  "version": "2.5.0",
+  "author": "Blackberry",
+  "description": "NoPazazKit by Blackberry",
+  "license": "GNU General Public License v3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baddatamusic/NoPazazKit.git"
+  },
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "build:win": "electron-builder --win --ia32 --x64",
+    "build:linux": "electron-builder --linux --x64",
+    "dist": "electron-builder --dir",
+    "lint": "echo \"No linting configured\""
+  },
+  "dependencies": {
+    "electron-log": "^4.4.8",
+    "electron-squirrel-startup": "^1.0.1",
+    "electron-window-state": "^5.0.3"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^7.6.0",
+    "@electron-forge/maker-squirrel": "^7.6.0",
+    "@electron-forge/maker-zip": "^7.6.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.6.0",
+    "@electron-forge/plugin-fuses": "^7.6.0",
+    "@electron/fuses": "^1.8.0",
+    "electron": "^40.2.1",
+    "electron-builder": "^26.4.0"
+  },
+  "overrides": {
+    "tar": "7.5.15",
+    "tmp": "0.2.5"
+  },
+  "build": {
+    "appId": "com.blackberry.nopazazkit",
+    "productName": "NoPazazKit by Blackberry",
+    "files": [
+      "**/*"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "src/assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "linux": {
+      "target": ["AppImage"],
+      "artifactName": "${productName}-${version}.${ext}",
+      "icon": "src/assets/icon.png"
+    }
+  }
+}
