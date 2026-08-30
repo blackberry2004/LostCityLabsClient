@@ -406,15 +406,10 @@
                     <input type="text" id="account-username-input" placeholder="Login name" autocomplete="off" spellcheck="false">
                 </div>
                 <div class="setting-row">
-                    <label>Password (Advanced):</label>
-                    <input type="password" id="account-password-input" placeholder="Advanced world password" autocomplete="off">
+                    <label>Password:</label>
+                    <input type="password" id="account-password-input" placeholder="Password" autocomplete="off">
                 </div>
                 <div id="account-password-hint" style="display:none;font-size:10px;color:#888;margin:-4px 0 8px 130px;">Leave blank to keep the existing password.</div>
-                <div class="setting-row">
-                    <label>Password (Classic):</label>
-                    <input type="password" id="account-password-classic-input" placeholder="Classic world password" autocomplete="off">
-                </div>
-                <div id="account-password-classic-hint" style="display:none;font-size:10px;color:#888;margin:-4px 0 8px 130px;">Leave blank to keep the existing password.</div>
                 <div class="setting-row">
                     <label>Hotkey:</label>
                     <div style="display:flex;gap:4px;flex:1;align-items:center;">
@@ -1040,10 +1035,10 @@
                 info.style.cssText = 'flex:1;min-width:0;';
                 const name = acc.username || '(unnamed)';
                 const hk = acc.hotkey ? acceleratorToDisplay(acc.hotkey) : 'No hotkey';
-                const worldTags = [acc.hasPassword ? 'Advanced' : null, acc.hasPasswordClassic ? 'Classic' : null].filter(Boolean).join(', ') || 'No password';
+                const passwordTag = acc.hasPassword ? 'Password saved' : 'No password';
                 info.innerHTML =
                     '<div style="font-size:13px;color:#f0e68c;font-weight:bold;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(name) + '</div>' +
-                    '<div style="font-size:10px;color:#c8941c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(hk) + ' · ' + escapeHtml(worldTags) + '</div>';
+                    '<div style="font-size:10px;color:#c8941c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(hk) + ' · ' + escapeHtml(passwordTag) + '</div>';
                 card.appendChild(info);
 
                 const loginBtn = document.createElement('button');
@@ -1081,7 +1076,6 @@
             const form = document.getElementById('account-form-section');
             const title = document.getElementById('account-form-title');
             const hint = document.getElementById('account-password-hint');
-            const hintClassic = document.getElementById('account-password-classic-hint');
             const status = document.getElementById('account-form-status');
             status.textContent = '';
             form.style.display = 'block';
@@ -1091,18 +1085,14 @@
                 title.textContent = 'Edit Account';
                 document.getElementById('account-username-input').value = acc.username || '';
                 document.getElementById('account-password-input').value = '';
-                document.getElementById('account-password-classic-input').value = '';
                 accountHotkey = acc.hotkey || '';
                 hint.style.display = acc.hasPassword ? 'block' : 'none';
-                hintClassic.style.display = acc.hasPasswordClassic ? 'block' : 'none';
             } else {
                 title.textContent = 'Add Account';
                 document.getElementById('account-username-input').value = '';
                 document.getElementById('account-password-input').value = '';
-                document.getElementById('account-password-classic-input').value = '';
                 accountHotkey = '';
                 hint.style.display = 'none';
-                hintClassic.style.display = 'none';
             }
             document.getElementById('account-hotkey-input').value = accountHotkey ? acceleratorToDisplay(accountHotkey) : '';
             form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1117,17 +1107,16 @@
         function saveAccountForm() {
             const username = document.getElementById('account-username-input').value.trim();
             const password = document.getElementById('account-password-input').value;
-            const passwordClassic = document.getElementById('account-password-classic-input').value;
             const status = document.getElementById('account-form-status');
             const existing = editingAccountId ? accounts.find(a => a.id === editingAccountId) : null;
 
             if (!username) { status.textContent = 'Username is required.'; status.style.color = '#ff8888'; return; }
-            // Require at least one password for new accounts
-            if (!existing && !password && !passwordClassic) {
-                status.textContent = 'At least one password is required.'; status.style.color = '#ff8888'; return;
+            // Require a password for new accounts
+            if (!existing && !password) {
+                status.textContent = 'Password is required.'; status.style.color = '#ff8888'; return;
             }
 
-            ipcRenderer.invoke('save-account', { id: editingAccountId, username, password, passwordClassic, hotkey: accountHotkey })
+            ipcRenderer.invoke('save-account', { id: editingAccountId, username, password, hotkey: accountHotkey })
                 .then(updated => {
                     accounts = updated || [];
                     refreshAccountsUI();

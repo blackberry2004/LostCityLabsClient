@@ -112,16 +112,11 @@ function sanitizeAccount(acc) {
     id: acc.id,
     username: acc.username || '',
     hotkey: acc.hotkey || '',
-    hasPassword: !!acc.encPassword,
-    hasPasswordClassic: !!acc.encPasswordClassic
+    hasPassword: !!acc.encPassword
   };
 }
 function listSanitizedAccounts() {
   return (appSettings.accounts || []).map(sanitizeAccount);
-}
-
-function isClassicUrl(url) {
-  return typeof url === 'string' && url.includes('/classic/');
 }
 
 let activeLoginAccount = '';
@@ -134,17 +129,9 @@ function loginToActiveView(acc) {
   }
   const wc = pv.view.webContents;
   const username = acc.username || '';
+  const password = decryptSecret(acc.encPassword);
 
-  // Pick the password for the active world, falling back to the other if only one is set.
-  const onClassic = isClassicUrl(wc.getURL());
-  let password;
-  if (onClassic) {
-    password = decryptSecret(acc.encPasswordClassic) || decryptSecret(acc.encPassword);
-  } else {
-    password = decryptSecret(acc.encPassword) || decryptSecret(acc.encPasswordClassic);
-  }
-
-  if (!username || !password) { log.warn('login: account missing username or password for this world'); return; }
+  if (!username || !password) { log.warn('login: account missing username or password'); return; }
 
   const js = '(function(){try{' +
     'if(window.LCClient&&typeof window.LCClient.login==="function"){' +
@@ -903,9 +890,6 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
     acc.hotkey = (data.hotkey || '').trim();
     if (typeof data.password === 'string' && data.password.length > 0) {
       acc.encPassword = encryptSecret(data.password);
-    }
-    if (typeof data.passwordClassic === 'string' && data.passwordClassic.length > 0) {
-      acc.encPasswordClassic = encryptSecret(data.passwordClassic);
     }
     saveSettings();
     registerAccountHotkeys();
