@@ -15,6 +15,7 @@
     "make": "electron-forge make",
     "build:win": "electron-builder --win --ia32 --x64",
     "build:linux": "electron-builder --linux --x64",
+    "build:mac": "electron-builder --mac --x64 --arm64",
     "dist": "electron-builder --dir",
     "lint": "echo \"No linting configured\""
   },
@@ -58,6 +59,13 @@
       "target": ["AppImage"],
       "artifactName": "${productName}-${version}.${ext}",
       "icon": "src/assets/icon.png"
+    },
+    "mac": {
+      "target": ["dmg", "zip"],
+      "icon": "src/assets/icon.icns",
+      "category": "public.app-category.utilities",
+      "identity": null,
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     }
   }
 }

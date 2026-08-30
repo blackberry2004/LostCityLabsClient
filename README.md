@@ -19,7 +19,7 @@ Originally based on 05x Client by Akg, modified by Blackberry to point at NoPaza
 
 - [Node.js](https://nodejs.org) 18 or newer (CI builds on Node 22)
 - [Git](https://git-scm.com)
-- Windows or Linux to produce a native installer (see [Building installers](#building-installers)). macOS can run the app from source but there's no packaged build for it.
+- Windows, Linux, or macOS to produce a native installer for that platform (see [Installers](#installers-electron-builder)) — electron-builder can't cross-compile a Linux or macOS build from Windows, or vice versa.
 
 ## Getting the source
 
@@ -73,7 +73,13 @@ npm run build:linux
 ```
 Produces `dist/NoPazazKit by Blackberry-<version>.AppImage`.
 
-Both scripts wrap `electron-builder`; see `package.json`'s `build` block for the full configuration (icons, appId, NSIS options, etc.).
+**macOS** (run on macOS):
+```
+npm run build:mac
+```
+Produces a `.dmg` and `.zip` for both Intel and Apple Silicon under `dist/`. The build is unsigned (no Apple Developer ID certificate configured) — see the [macOS install note](#macos) below.
+
+All three scripts wrap `electron-builder`; see `package.json`'s `build` block for the full configuration (icons, appId, NSIS options, etc.). CI (`.github/workflows/release.yml`) builds all three automatically on their respective OS runners whenever a `v*` tag is pushed, and attaches the artifacts to a GitHub Release.
 
 ## Installing a built release
 
@@ -84,7 +90,7 @@ Run the `.exe` installer, pick an install folder, and launch NoPazazKit from the
 Download the `.AppImage`, mark it executable (`chmod +x`), and run it directly — no install step needed.
 
 ### macOS
-No prebuilt installer is provided. Clone the repo and run it from source (see [Running in development](#running-in-development)) — it works, but you'll need to `git pull` and restart manually to pick up changes, since there's no auto-updater.
+Open the `.dmg` and drag NoPazazKit into Applications (or unzip the `.zip` build). The app is **unsigned** (no Apple Developer ID certificate), so Gatekeeper will refuse to open it with a normal double-click the first time. Instead, right-click the app → **Open** → confirm in the dialog that appears, which only needs to be done once. If macOS still reports it as damaged, clear the quarantine flag from Terminal: `xattr -cr /Applications/NoPazazKit\ by\ Blackberry.app`.
 
 ## Local data
 

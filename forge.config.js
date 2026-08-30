@@ -4,7 +4,7 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 module.exports = {
     packagerConfig: {
         asar: true,
-        icon: 'src/assets/icon.ico',
+        icon: 'src/assets/icon',
         outDir: 'out',
         win32metadata: {
             ProductName: 'NoPazazKit by Blackberry'
