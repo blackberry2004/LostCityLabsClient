@@ -28,13 +28,13 @@
             <img src="assets/watch.png" class="nav-icon" onerror="this.style.display='none'">
             <span>Stopwatch</span>
         </div>
-        <div class="nav-button special-link" onclick="openNav('youtube')" data-nav-id="creators">
-            <img src="assets/creators.png" class="nav-icon" onerror="this.style.display='none'">
-            <span>Creators</span>
-        </div>
-        <div class="nav-button special-link link" data-url='https://lostcitylabs.com/highscores' data-nav-id="hiscores" data-title="Highscores" onclick="addTab('https://lostcitylabs.com/highscores', 'Highscores', 'assets/hiscores.png')">
+        <div class="nav-button special-link link" data-url='https://www.lostcitylabs.com/hiscores' data-nav-id="hiscores" data-title="Highscores" onclick="addTab('https://www.lostcitylabs.com/hiscores', 'Highscores', 'assets/hiscores.png')">
             <img src="assets/hiscores.png" class="nav-icon">
             <span>Highscores</span><span class="open-external" onclick="event.stopPropagation(); openExternal(this.parentElement.getAttribute('data-url'), this.parentElement.getAttribute('data-title'))"><img src="assets/external-link.svg" alt="" class="icon" /></span>
+        </div>
+        <div class="nav-button special-link link" data-url='https://www.lostcitylabs.com/market' data-nav-id="market" data-title="Market" onclick="addTab('https://www.lostcitylabs.com/market', 'Market', 'assets/market.svg')">
+            <img src="assets/market.svg" class="nav-icon">
+            <span>Market</span><span class="open-external" onclick="event.stopPropagation(); openExternal(this.parentElement.getAttribute('data-url'), this.parentElement.getAttribute('data-title'))"><img src="assets/external-link.svg" alt="" class="icon" /></span>
         </div>
         <div class="nav-button special-link" onclick="openNotes()" data-nav-id="notes">
             <img src="assets/notes.png" class="nav-icon" onerror="this.style.display='none'">
@@ -71,6 +71,10 @@
         <div class="nav-button link" data-url='https://2004.losthq.rs/?p=itemdb' data-nav-id="itemdb" data-title="Item Database" onclick="addTab('https://2004.losthq.rs/?p=itemdb', 'Item Database', 'assets/itemdb.png')">
             <img src="assets/itemdb.png" class="nav-icon">
             <span>Item Database</span><span class="open-external" onclick="event.stopPropagation(); openExternal(this.parentElement.getAttribute('data-url'), this.parentElement.getAttribute('data-title'))"><img src="assets/external-link.svg" alt="" class="icon" /></span>
+        </div>
+        <div class="nav-button link" data-url='https://ko-fi.com/anderslc' data-nav-id="donate" data-title="Donate" onclick="addTab('https://ko-fi.com/anderslc', 'Donate', 'assets/donate.svg')">
+            <img src="assets/donate.svg" class="nav-icon">
+            <span>Donate</span><span class="open-external" onclick="event.stopPropagation(); openExternal(this.parentElement.getAttribute('data-url'), this.parentElement.getAttribute('data-title'))"><img src="assets/external-link.svg" alt="" class="icon" /></span>
         </div>
     </div>
     <script>

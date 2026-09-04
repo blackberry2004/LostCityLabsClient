@@ -24,10 +24,10 @@ let secondaryMode = 'countdown';
 const MAX_COUNTDOWN_SECONDS = 86400;
 
 // Config file path for persistent settings
-const configPath = path.join(process.env.APPDATA || process.env.HOME, '.nopazaz-kit-stopwatch-config.json');
+const configPath = path.join(process.env.APPDATA || process.env.HOME, '.lostcitizens-kit-stopwatch-config.json');
 
 // Sounds directory path in user app data
-const soundsDir = path.join(process.env.APPDATA || path.join(process.env.HOME, '.config'), 'nopazaz-kit', 'sounds');
+const soundsDir = path.join(process.env.APPDATA || path.join(process.env.HOME, '.config'), 'lostcitizens-kit', 'sounds');
 
 // Default packaged sound path (relative to app)
 let defaultPackagedSoundPath = '';

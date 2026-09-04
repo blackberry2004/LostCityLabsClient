@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <radialGradient id="marketCoinGrad" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#fff3b0"/>
+      <stop offset="60%" stop-color="#f0c04a"/>
+      <stop offset="100%" stop-color="#b8860b"/>
+    </radialGradient>
+  </defs>
+
+  <!-- roof trim -->
+  <rect x="3" y="4" width="26" height="3" rx="1" fill="#7a1f1f" stroke="#4a1010" stroke-width="0.75"/>
+
+  <!-- awning stripes -->
+  <rect x="4" y="7" width="4" height="7" fill="#f4e4c1"/>
+  <rect x="8" y="7" width="4" height="7" fill="#c0392b"/>
+  <rect x="12" y="7" width="4" height="7" fill="#f4e4c1"/>
+  <rect x="16" y="7" width="4" height="7" fill="#c0392b"/>
+  <rect x="20" y="7" width="4" height="7" fill="#f4e4c1"/>
+  <rect x="24" y="7" width="4" height="7" fill="#c0392b"/>
+
+  <!-- scalloped awning edge -->
+  <path d="M4 14 L8 14 L6 17.5 Z" fill="#f4e4c1"/>
+  <path d="M8 14 L12 14 L10 17.5 Z" fill="#c0392b"/>
+  <path d="M12 14 L16 14 L14 17.5 Z" fill="#f4e4c1"/>
+  <path d="M16 14 L20 14 L18 17.5 Z" fill="#c0392b"/>
+  <path d="M20 14 L24 14 L22 17.5 Z" fill="#f4e4c1"/>
+  <path d="M24 14 L28 14 L26 17.5 Z" fill="#c0392b"/>
+
+  <!-- awning outline -->
+  <path d="M4 7 L28 7 L28 14 L26 17.5 L24 14 L22 17.5 L20 14 L18 17.5 L16 14 L14 17.5 L12 14 L10 17.5 L8 14 L6 17.5 L4 14 Z"
+        fill="none" stroke="#4a1010" stroke-width="0.75" stroke-linejoin="round"/>
+
+  <!-- support poles -->
+  <rect x="6.5" y="14" width="1.6" height="11" fill="#6b4423" stroke="#3d2712" stroke-width="0.4"/>
+  <rect x="23.9" y="14" width="1.6" height="11" fill="#6b4423" stroke="#3d2712" stroke-width="0.4"/>
+
+  <!-- counter -->
+  <rect x="4" y="22" width="24" height="6" rx="1" fill="#8b5a2b" stroke="#4a2f10" stroke-width="0.75"/>
+  <rect x="4.5" y="22.3" width="23" height="1.8" fill="#a9713a"/>
+
+  <!-- coin on counter -->
+  <circle cx="16" cy="19.6" r="2.6" fill="url(#marketCoinGrad)" stroke="#5c4409" stroke-width="0.75"/>
+</svg>

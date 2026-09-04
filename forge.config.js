@@ -7,7 +7,7 @@ module.exports = {
         icon: 'src/assets/icon',
         outDir: 'out',
         win32metadata: {
-            ProductName: 'NoPazazKit by Blackberry'
+            ProductName: 'LostCitizensKit by Blackberry'
         }
     },
     rebuildConfig: {},
@@ -23,7 +23,7 @@ module.exports = {
         {
             name: '@electron-forge/maker-zip',
             config: {
-                bin: 'NoPazazKit'
+                bin: 'LostCitizensKit'
             }
         }
     ],

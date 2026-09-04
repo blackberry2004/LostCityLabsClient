@@ -1,12 +1,12 @@
 {
-  "name": "nopazaz-kit",
+  "name": "lostcitizens-kit",
   "version": "2.5.1",
   "author": "Blackberry",
-  "description": "NoPazazKit by Blackberry",
+  "description": "LostCitizensKit by Blackberry",
   "license": "GNU General Public License v3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/baddatamusic/NoPazazKit.git"
+    "url": "https://github.com/baddatamusic/LostCitizensKit.git"
   },
   "main": "src/main.js",
   "scripts": {
@@ -39,8 +39,8 @@
     "tmp": "0.2.5"
   },
   "build": {
-    "appId": "com.blackberry.nopazazkit",
-    "productName": "NoPazazKit by Blackberry",
+    "appId": "com.blackberry.lostcitizenskit",
+    "productName": "LostCitizensKit by Blackberry",
     "files": [
       "**/*"
     ],

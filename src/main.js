@@ -45,7 +45,7 @@ let navPanelPrevX = null;
 
 log.transports.file.level = 'info';
 
-const settingsPath = path.join(process.env.APPDATA || process.env.HOME || '.', '.nopazaz-kit-settings.json');
+const settingsPath = path.join(process.env.APPDATA || process.env.HOME || '.', '.lostcitizens-kit-settings.json');
 let appSettings = {
   mainWindow: { width: 1100, height: 920, x: null, y: null },
   zoomFactor: 1, tabZoom: {}, externalZoom: {},
@@ -458,7 +458,7 @@ let backgroundAlertTriggered = false;
 let backgroundAutoLoop = false;
 let backgroundTimerStartTime = null;
 
-const baseWindowTitle = `NoPazazKit by Blackberry v${version}`;
+const baseWindowTitle = `LostCitizensKit by Blackberry v${version}`;
 
 // ── World status (latency in titlebar) ──────────────────────────────────────
 let worldStatusInterval = null;
@@ -503,6 +503,49 @@ function startWorldStatusInterval() {
   refreshLatency();
 }
 
+// ── World player counts (Switch World panel + window title) ─────────────────
+let worldPlayerCounts = { 1: null, 2: null, 3: null, 4: null };
+let totalPlayerCount = null;
+let playerCountInterval = null;
+
+async function fetchWorldPlayerCount(worldNum) {
+  try {
+    const res = await fetch(`https://www.lostcitylabs.com/play/api/players/${worldNum}`);
+    if (!res.ok) return null;
+    const text = await res.text();
+    const m = text.match(/lostcity_active_players\{[^}]*\} (\d+)/);
+    return m ? parseInt(m[1], 10) : null;
+  } catch (e) { return null; }
+}
+
+async function refreshPlayerCounts() {
+  let total = 0, anyOnline = false;
+  for (const w of [1, 2, 3, 4]) {
+    const count = await fetchWorldPlayerCount(w);
+    worldPlayerCounts[w] = count;
+    if (count !== null) { total += count; anyOnline = true; }
+  }
+  totalPlayerCount = anyOnline ? total : null;
+  if (navView && !navView.webContents.isDestroyed()) {
+    navView.webContents.send('world-player-counts', worldPlayerCounts);
+  }
+  // Refresh the title through whichever timer state is currently active, same
+  // pattern refreshLatency() uses, so this never stomps on a running timer.
+  if (backgroundTimerRunning) {
+    updateWindowTitleWithTimer(true, backgroundTimerSeconds, backgroundTimerMode, backgroundCountdownTime);
+  } else if (gameClickTimerRunning) {
+    updateWindowTitleWithTimer(true, gameClickTimerSeconds, 'afk', afkTimerDuration);
+  } else {
+    updateWindowTitleWithTimer(false, 0, backgroundTimerMode, backgroundCountdownTime);
+  }
+}
+
+function startPlayerCountInterval() {
+  if (playerCountInterval) return;
+  playerCountInterval = setInterval(refreshPlayerCounts, 120000);
+  refreshPlayerCounts();
+}
+
 function formatWindowTitleTime(totalSeconds) {
   const mins = Math.floor(Math.abs(totalSeconds) / 60);
   const secs = Math.abs(totalSeconds) % 60;
@@ -514,7 +557,11 @@ function updateWindowTitleWithTimer(running, seconds, mode, countdownTime) {
   if (!mainWindow || mainWindow.isDestroyed()) return;
   const worldTitle = getCurrentWorldTitle();
   const latencyStr = lastKnownLatency != null ? `${lastKnownLatency}ms` : '—ms';
-  let title = `${baseWindowTitle}  |  ${worldTitle}  |  ${latencyStr}`;
+  let title = baseWindowTitle;
+  if (totalPlayerCount != null) {
+    title += `  |  There are currently ${totalPlayerCount} ${totalPlayerCount === 1 ? 'person' : 'people'} playing!`;
+  }
+  title += `  |  ${worldTitle}  |  ${latencyStr}`;
   if (running) {
     let modeLabel, displayValue;
     if (mode === 'afk') {
@@ -551,8 +598,8 @@ if (appSettings.afkTimerDuration >= 30 && appSettings.afkTimerDuration <= 600) {
 
 async function loadSoundSettings() {
   try {
-    const soundsDir = path.join(process.env.APPDATA || path.join(process.env.HOME || process.env.USERPROFILE, '.config'), 'nopazaz-kit', 'sounds');
-    const configPath = path.join(process.env.APPDATA || process.env.HOME, '.nopazaz-kit-stopwatch-config.json');
+    const soundsDir = path.join(process.env.APPDATA || path.join(process.env.HOME || process.env.USERPROFILE, '.config'), 'lostcitizens-kit', 'sounds');
+    const configPath = path.join(process.env.APPDATA || process.env.HOME, '.lostcitizens-kit-stopwatch-config.json');
     const fsPromises = require('fs').promises;
     const configData = await fsPromises.readFile(configPath, 'utf8');
     const config = JSON.parse(configData);
@@ -567,7 +614,7 @@ loadSoundSettings();
 
 function getScreenshotFolder() {
   let folder = appSettings.screenshotFolder;
-  if (!folder) folder = path.join(app.getPath('pictures'), 'NoPazazKit adventures');
+  if (!folder) folder = path.join(app.getPath('pictures'), 'LostCitizensKit adventures');
   if (!fs.existsSync(folder)) {
     try { fs.mkdirSync(folder, { recursive: true }); }
     catch (e) { log.error('Failed to create screenshot folder:', e); folder = app.getPath('pictures'); }
@@ -915,7 +962,7 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
     settingsWindow = new BrowserWindow({
       width: settingsBounds.width || 600, height: settingsBounds.height || 500,
       x: settingsBounds.x != null ? settingsBounds.x : undefined, y: settingsBounds.y != null ? settingsBounds.y : undefined,
-      autoHideMenuBar: true, webPreferences: { nodeIntegration: true, contextIsolation: false }, title: 'NoPazazKit - Settings'
+      autoHideMenuBar: true, webPreferences: { nodeIntegration: true, contextIsolation: false }, title: 'LostCitizensKit - Settings'
     });
     settingsWindow.loadFile(path.join(__dirname, 'navitems/stopwatch-settings.html'));
     const saveSettingsBounds = () => {
@@ -986,7 +1033,7 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
 
   // Return the shared sounds directory path
   ipcMain.handle('get-sounds-dir', () => {
-    return path.join(process.env.APPDATA || path.join(process.env.HOME || process.env.USERPROFILE, '.config'), 'nopazaz-kit', 'sounds');
+    return path.join(process.env.APPDATA || path.join(process.env.HOME || process.env.USERPROFILE, '.config'), 'lostcitizens-kit', 'sounds');
   });
 
   // ── Adventure Capture ───────────────────────────────────────────────────────
@@ -1067,6 +1114,10 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
     if (currentNavViewName === 'youtube') {
       navView.webContents.send('creator-channels-from-main', appSettings.creatorChannels || []);
     }
+    // Send cached per-world player counts when worldswitcher.html loads
+    if (currentNavViewName === 'worldswitcher') {
+      navView.webContents.send('world-player-counts', worldPlayerCounts);
+    }
     // Tell the nav view what display mode it should render in
     if (navView && !navView.webContents.isDestroyed()) {
       navView.webContents.send('nav-panel-mode', navPanelMode);
@@ -1074,6 +1125,7 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
   });
   mainWindow.contentView.addChildView(navView);
   startWorldStatusInterval();
+  startPlayerCountInterval();
 
   const mainView = new WebContentsView({ webPreferences: { webSecurity: false, preload: path.join(__dirname, 'gameview-preload.js') } });
   const startWorldUrl = tabs[0].url, startWorldTitle = tabs[0].title;
@@ -1670,7 +1722,7 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
     soundManagerWindow = new BrowserWindow({
       width: smBounds.width || 450, height: smBounds.height || 500,
       x: smBounds.x != null ? smBounds.x : undefined, y: smBounds.y != null ? smBounds.y : undefined,
-      autoHideMenuBar: true, webPreferences: { nodeIntegration: true, contextIsolation: false }, title: 'NoPazazKit - Sound Manager'
+      autoHideMenuBar: true, webPreferences: { nodeIntegration: true, contextIsolation: false }, title: 'LostCitizensKit - Sound Manager'
     });
     soundManagerWindow.loadFile(path.join(__dirname, 'navitems/sound-manager.html'));
     const saveSMBounds = () => {
@@ -1686,10 +1738,10 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
   });
 
   ipcMain.handle('get-sounds-config', async () => {
-    const soundsDir = path.join(process.env.APPDATA || path.join(process.env.HOME || process.env.USERPROFILE, '.config'), 'nopazaz-kit', 'sounds');
+    const soundsDir = path.join(process.env.APPDATA || path.join(process.env.HOME || process.env.USERPROFILE, '.config'), 'lostcitizens-kit', 'sounds');
     let userVolume = 60, csp = '', sa = false;
     try {
-      const configPath = path.join(process.env.APPDATA || process.env.HOME, '.nopazaz-kit-stopwatch-config.json');
+      const configPath = path.join(process.env.APPDATA || process.env.HOME, '.lostcitizens-kit-stopwatch-config.json');
       const config = JSON.parse(await require('fs').promises.readFile(configPath, 'utf8'));
       userVolume = config.soundVolume || 60; sa = config.soundAlert || false;
       if (config.customSoundFilename) csp = path.normalize(path.join(soundsDir, config.customSoundFilename));
@@ -1709,7 +1761,7 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
       width: notesBounds.width || 500, height: notesBounds.height || 600,
       x: notesBounds.x != null ? notesBounds.x : undefined, y: notesBounds.y != null ? notesBounds.y : undefined,
       minWidth: 350, minHeight: 300, autoHideMenuBar: true,
-      webPreferences: { nodeIntegration: true, contextIsolation: false }, title: 'NoPazazKit - Notes'
+      webPreferences: { nodeIntegration: true, contextIsolation: false }, title: 'LostCitizensKit - Notes'
     });
     notesWindow.loadFile(path.join(__dirname, 'navitems/notes.html'));
     const saveNotesBounds = () => {
@@ -1726,7 +1778,7 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
   });
   ipcMain.on('save-notes-window-size', async (event, { width, height }) => {
     try {
-      const notesPath = path.join(process.env.APPDATA || process.env.HOME, '.nopazaz-kit-notes.json');
+      const notesPath = path.join(process.env.APPDATA || process.env.HOME, '.lostcitizens-kit-notes.json');
       const fsP = require('fs').promises;
       let data = {};
       try { data = JSON.parse(await fsP.readFile(notesPath, 'utf8')); } catch (e) {}
@@ -1735,11 +1787,11 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
     } catch (e) { console.log('Error saving notes window size:', e); }
   });
   ipcMain.handle('load-notes', async () => {
-    try { return JSON.parse(await require('fs').promises.readFile(path.join(process.env.APPDATA || process.env.HOME, '.nopazaz-kit-notes.json'), 'utf8')); }
+    try { return JSON.parse(await require('fs').promises.readFile(path.join(process.env.APPDATA || process.env.HOME, '.lostcitizens-kit-notes.json'), 'utf8')); }
     catch (e) { return {}; }
   });
   ipcMain.on('save-notes', async (event, notes) => {
-    try { await require('fs').promises.writeFile(path.join(process.env.APPDATA || process.env.HOME, '.nopazaz-kit-notes.json'), JSON.stringify(notes, null, 2)); }
+    try { await require('fs').promises.writeFile(path.join(process.env.APPDATA || process.env.HOME, '.lostcitizens-kit-notes.json'), JSON.stringify(notes, null, 2)); }
     catch (e) { console.log('Error saving notes:', e); }
   });
 
@@ -1989,7 +2041,7 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
   ipcMain.handle('fetch-url-for-channel-id', async (event, url) => {
     try {
       const response = await fetch(url, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; NoPazazKit)' }
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; LostCitizensKit)' }
       });
       if (!response.ok) return null;
       return await response.text();
@@ -2048,6 +2100,8 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
     if (navView && !navView.webContents.isDestroyed())
       navView.webContents.send('update-nav-visibility', hiddenIds);
   });
+
+  ipcMain.handle('get-world-player-counts', () => worldPlayerCounts);
 
   ipcMain.on('select-world', (event, url, title) => {
     // Worlds are ALWAYS loaded into the unclosable main game tab, never into

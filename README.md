@@ -1,8 +1,8 @@
-# NoPazazKit
+# LostCitizensKit
 
-NoPazazKit is a desktop client built with Electron and JavaScript for **NoPazazScape**, a private server built on the [LostCityLabs / Lost Citizens](https://www.lostcitylabs.com) codebase. It wraps the game in a native desktop app and adds a set of quality-of-life tools around it: world switching, an AFK/countdown stopwatch, screenshot capture, notes, content-creator notifications, quick-login accounts, and shortcuts to highscores, guides, and other reference tools.
+LostCitizensKit is a desktop client built with Electron and JavaScript for **LostCitizensScape**, a private server built on the [LostCityLabs / Lost Citizens](https://www.lostcitylabs.com) codebase. It wraps the game in a native desktop app and adds a set of quality-of-life tools around it: world switching, an AFK/countdown stopwatch, screenshot capture, notes, content-creator notifications, quick-login accounts, and shortcuts to highscores, guides, and other reference tools.
 
-Originally based on 05x Client by Akg, modified by Blackberry to point at NoPazazScape / Lost Citizens.
+Originally based on 05x Client by Akg, modified by Blackberry to point at LostCitizensScape / Lost Citizens.
 
 ## Features
 
@@ -24,8 +24,8 @@ Originally based on 05x Client by Akg, modified by Blackberry to point at NoPaza
 ## Getting the source
 
 ```
-git clone https://github.com/baddatamusic/NoPazazKit.git
-cd NoPazazKit
+git clone https://github.com/baddatamusic/LostCitizensKit.git
+cd LostCitizensKit
 npm install
 ```
 
@@ -65,13 +65,13 @@ These produce a proper installer and must be run on the target OS (electron-buil
 ```
 npm run build:win
 ```
-Produces `dist/NoPazazKit by Blackberry-Setup-<version>.exe` (NSIS installer, both x86 and x64).
+Produces `dist/LostCitizensKit by Blackberry-Setup-<version>.exe` (NSIS installer, both x86 and x64).
 
 **Linux** (run on Linux):
 ```
 npm run build:linux
 ```
-Produces `dist/NoPazazKit by Blackberry-<version>.AppImage`.
+Produces `dist/LostCitizensKit by Blackberry-<version>.AppImage`.
 
 **macOS** (run on macOS):
 ```
@@ -84,24 +84,24 @@ All three scripts wrap `electron-builder`; see `package.json`'s `build` block fo
 ## Installing a built release
 
 ### Windows
-Run the `.exe` installer, pick an install folder, and launch NoPazazKit from the Start Menu shortcut it creates.
+Run the `.exe` installer, pick an install folder, and launch LostCitizensKit from the Start Menu shortcut it creates.
 
 ### Linux
 Download the `.AppImage`, mark it executable (`chmod +x`), and run it directly — no install step needed.
 
 ### macOS
-Open the `.dmg` and drag NoPazazKit into Applications (or unzip the `.zip` build). The app is **unsigned** (no Apple Developer ID certificate), so Gatekeeper will refuse to open it with a normal double-click the first time. Instead, right-click the app → **Open** → confirm in the dialog that appears, which only needs to be done once. If macOS still reports it as damaged, clear the quarantine flag from Terminal: `xattr -cr /Applications/NoPazazKit\ by\ Blackberry.app`.
+Open the `.dmg` and drag LostCitizensKit into Applications (or unzip the `.zip` build). The app is **unsigned** (no Apple Developer ID certificate), so Gatekeeper will refuse to open it with a normal double-click the first time. Instead, right-click the app → **Open** → confirm in the dialog that appears, which only needs to be done once. If macOS still reports it as damaged, clear the quarantine flag from Terminal: `xattr -cr /Applications/LostCitizensKit\ by\ Blackberry.app`.
 
 ## Local data
 
-NoPazazKit stores its settings and per-feature data in your OS user-data directory (e.g. `%APPDATA%` on Windows), independent of the install location:
+LostCitizensKit stores its settings and per-feature data in your OS user-data directory (e.g. `%APPDATA%` on Windows), independent of the install location:
 
 | File / folder | Purpose |
 |---|---|
-| `.nopazaz-kit-settings.json` | Window state, last world, zoom, accounts, nav visibility, etc. |
-| `.nopazaz-kit-stopwatch-config.json` | Stopwatch/AFK timer configuration |
-| `.nopazaz-kit-notes.json` | Notes window contents |
-| `nopazaz-kit/sounds/` | Custom alert/screenshot sound files |
+| `.lostcitizens-kit-settings.json` | Window state, last world, zoom, accounts, nav visibility, etc. |
+| `.lostcitizens-kit-stopwatch-config.json` | Stopwatch/AFK timer configuration |
+| `.lostcitizens-kit-notes.json` | Notes window contents |
+| `lostcitizens-kit/sounds/` | Custom alert/screenshot sound files |
 
 Deleting these resets the app to defaults; nothing under the install directory itself needs to be touched.
 
