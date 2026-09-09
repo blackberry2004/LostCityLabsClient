@@ -1,32 +1,5 @@
 const { ipcRenderer } = require('electron');
 
-// ── Expose the game client instance for quick-login ───────────────────────────
-// The page boots the client with an inline <script type="module"> that runs
-// new Client(...) without keeping a reference. We catch that script node as it
-// is added and rewrite its source to assign the instance to window.LCClient.
-// The main process then calls window.LCClient.login(user, pass) directly via
-// executeJavaScript — no keystroke simulation needed.
-(function exposeGameClient() {
-    try {
-        const observer = new MutationObserver((mutations) => {
-            for (const mutation of mutations) {
-                for (const node of mutation.addedNodes) {
-                    try {
-                        if (node.nodeName !== 'SCRIPT') continue;
-                        const src = node.textContent || '';
-                        if (src.includes('new Client(') && !src.includes('window.LCClient')) {
-                            node.textContent = src.replace('new Client(', 'window.LCClient = new Client(');
-                            observer.disconnect();
-                            return;
-                        }
-                    } catch (e) { /* ignore individual node errors */ }
-                }
-            }
-        });
-        observer.observe(document, { childList: true, subtree: true });
-    } catch (e) { /* ignore — quick-login simply won't be available */ }
-})();
-
 // Forward wheel events (when Ctrl is held) to the main process for zoom
 window.addEventListener('wheel', (e) => {
     try {

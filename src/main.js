@@ -119,8 +119,59 @@ function listSanitizedAccounts() {
   return (appSettings.accounts || []).map(sanitizeAccount);
 }
 
+// ── Quick-login via simulated input ─────────────────────────────────────────
+// The login screen (username/password/Login button) is drawn entirely on the
+// game's <canvas> — there's no real DOM form to fill in, and no exposed JS API
+// to call directly (the client now boots inside multiclient.js's <iframe>,
+// and every attempt to reach into its JS state before `new Client(...)` runs —
+// preload + nodeIntegrationInSubFrames, and several DevTools-protocol
+// injection strategies — hit dead ends specific to that iframe). So instead
+// this drives the login screen the way a real player would: click the
+// username field, type the username, Tab to the password field, type the
+// password, then click the Login button. webContents.sendInputEvent()
+// dispatches these as real input events at the Chromium level, so it works
+// regardless of the game's internal DOM/frame structure — the same approach
+// already used for host-level AFK click/keyboard detection.
+//
+// Coordinates are relative to the game view's own viewport and were read off
+// a screenshot of the classic-style login screen; they'll need updating if
+// the login screen's layout or the view's size/zoom ever changes. Typing
+// reliably lands in the right fields; the final Login-button click doesn't
+// always register (needs a closer look at exact button bounds/click timing),
+// so this currently fills in the credentials for you but may still require
+// clicking Login by hand.
+const LOGIN_FIELD_X = 700;
+const LOGIN_USERNAME_Y = 508;
+const LOGIN_BUTTON_X = 527;
+const LOGIN_BUTTON_Y = 620;
+const LOGIN_KEY_DELAY_MS = 25;
+
+function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+
+function clickAt(wc, x, y) {
+  // Canvas-rendered UI (like this login screen) typically tracks hover state
+  // via mousemove to decide what's under the cursor, and only then treats a
+  // mousedown/up there as "clicked" — a bare down/up with no prior move can
+  // land without the button ever registering as targeted.
+  wc.sendInputEvent({ type: 'mouseMove', x, y });
+  wc.sendInputEvent({ type: 'mouseDown', x, y, button: 'left', clickCount: 1 });
+  wc.sendInputEvent({ type: 'mouseUp', x, y, button: 'left', clickCount: 1 });
+}
+
+function pressKey(wc, keyCode) {
+  wc.sendInputEvent({ type: 'keyDown', keyCode });
+  wc.sendInputEvent({ type: 'char', keyCode });
+  wc.sendInputEvent({ type: 'keyUp', keyCode });
+}
+
+async function typeText(wc, text) {
+  for (const ch of text) {
+    pressKey(wc, ch);
+    await sleep(LOGIN_KEY_DELAY_MS);
+  }
+}
 let activeLoginAccount = '';
-function loginToActiveView(acc) {
+async function loginToActiveView(acc) {
   if (!acc) return;
   const pv = primaryViews && (primaryViews.find(p => p.id === currentTab) || primaryViews.find(p => p.id === 'main'));
   if (!pv || !pv.view || !pv.view.webContents || pv.view.webContents.isDestroyed()) {
@@ -133,17 +184,21 @@ function loginToActiveView(acc) {
 
   if (!username || !password) { log.warn('login: account missing username or password'); return; }
 
-  const js = '(function(){try{' +
-    'if(window.LCClient&&typeof window.LCClient.login==="function"){' +
-    'window.LCClient.login(' + JSON.stringify(username) + ',' + JSON.stringify(password) + ');return "ok";}' +
-    'return "no-client";}catch(e){return "error:"+(e&&e.message);}})()';
-
   try { wc.focus(); } catch (e) {}
-  wc.executeJavaScript(js, true)
-    .then(res => {
-      log.info('Quick-login for', username, '→', res);
-    })
-    .catch(err => log.error('login: executeJavaScript failed:', err));
+
+  try {
+    clickAt(wc, LOGIN_FIELD_X, LOGIN_USERNAME_Y);
+    await sleep(LOGIN_KEY_DELAY_MS);
+    await typeText(wc, username);
+    pressKey(wc, 'Tab');
+    await sleep(LOGIN_KEY_DELAY_MS);
+    await typeText(wc, password);
+    await sleep(LOGIN_KEY_DELAY_MS);
+    clickAt(wc, LOGIN_BUTTON_X, LOGIN_BUTTON_Y);
+    log.info('Quick-login: simulated login submitted for', username);
+  } catch (e) {
+    log.error('Quick-login: input simulation failed:', e);
+  }
 
   activeLoginAccount = username;
 }
@@ -1186,6 +1241,21 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
     // ── AFK timer reset on keypress (before-input-event is keyboard only) ────
     if (input.type !== 'keyDown') return;
     if (!afkGameClick || afkInputType !== 'both') return;
+    resetGameClickTimer();
+    if (navView && navView.webContents) navView.webContents.send('afk-game-click-reset');
+  });
+
+  // ── AFK timer reset on mouse click — host-level, iframe-proof ──────────────
+  // The game now boots inside a same-origin <iframe> created by multiclient.js
+  // (world tabs), so the gameview-preload.js document-level 'mousedown'
+  // listener no longer sees clicks — preload only runs in the top frame, and
+  // the iframe is a separate document. 'input-event' (unlike before-input-event,
+  // which is keyboard-only) also reports mouse input and fires at the WebContents
+  // level regardless of which frame inside it the click actually landed in, so
+  // it keeps working no matter how the game's internal DOM/frame structure changes.
+  mainView.webContents.on('input-event', (event, input) => {
+    if (input.type !== 'mouseDown') return;
+    if (!afkGameClick) return;
     resetGameClickTimer();
     if (navView && navView.webContents) navView.webContents.send('afk-game-click-reset');
   });
