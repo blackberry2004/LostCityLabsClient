@@ -1,6 +1,6 @@
 const { ipcRenderer } = require('electron');
 
-// The four Lost Citizens worlds. `url` is loaded directly in the game tab.
+// The three Lost Citizens worlds. `url` is loaded directly in the game tab.
 const worlds = [
     {
         key: 'world1',
@@ -18,13 +18,8 @@ const worlds = [
         key: 'world3',
         num: 3,
         title: 'World 3',
-        url: 'https://www.lostcitylabs.com/play/world-3/'
-    },
-    {
-        key: 'world4',
-        num: 4,
-        title: 'World 4',
-        url: 'https://www.lostcitylabs.com/play/world-4/'
+        url: 'https://www.lostcitylabs.com/play/world-3/',
+        pvp: true
     }
 ];
 
@@ -57,7 +52,8 @@ function displayWorlds() {
         item.className = 'world-item';
         item.id = `world-${world.key}`;
         item.innerHTML = `
-            <div class="world-title">${world.title}</div>
+            <div class="world-title"${world.pvp ? ' style="color: #ff0000;"' : ''}>${world.title}</div>
+            ${world.pvp ? '<div class="world-title" style="color: #ff0000;">(PVP)</div>' : ''}
             <div class="world-players">players: …</div>
             <div class="world-latency" style="color: #888888;">pinging...</div>
         `;

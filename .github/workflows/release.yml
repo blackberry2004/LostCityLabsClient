@@ -31,7 +31,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/LostCitizensKit by Blackberry-Setup-*.exe
+            dist/LostCityLabsClient by Blackberry-Setup-*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -57,7 +57,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/LostCitizensKit by Blackberry-*.AppImage
+            dist/LostCityLabsClient by Blackberry-*.AppImage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -83,7 +83,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/LostCitizensKit by Blackberry-*.dmg
-            dist/LostCitizensKit by Blackberry-*.zip
+            dist/LostCityLabsClient by Blackberry-*.dmg
+            dist/LostCityLabsClient by Blackberry-*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

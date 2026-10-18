@@ -1,12 +1,12 @@
 {
-  "name": "lostcitizens-kit",
+  "name": "lostcitylabsclient",
   "version": "2.5.3",
   "author": "Blackberry",
-  "description": "LostCitizensKit by Blackberry",
+  "description": "LostCityLabsClient by Blackberry",
   "license": "GNU General Public License v3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/baddatamusic/LostCitizensKit.git"
+    "url": "https://github.com/blackberry2004/LostCityLabsClient.git"
   },
   "main": "src/main.js",
   "scripts": {
@@ -39,8 +39,8 @@
     "tmp": "0.2.5"
   },
   "build": {
-    "appId": "com.blackberry.lostcitizenskit",
-    "productName": "LostCitizensKit by Blackberry",
+    "appId": "com.blackberry.lostcitylabsclient",
+    "productName": "LostCityLabsClient by Blackberry",
     "files": [
       "**/*"
     ],

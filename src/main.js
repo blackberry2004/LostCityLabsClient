@@ -45,7 +45,25 @@ let navPanelPrevX = null;
 
 log.transports.file.level = 'info';
 
-const settingsPath = path.join(process.env.APPDATA || process.env.HOME || '.', '.lostcitizens-kit-settings.json');
+// One-time migration of user data from the old LostCitizensKit names
+(function migrateLegacyUserData() {
+  const base = process.env.APPDATA || process.env.HOME || '.';
+  const configBase = process.env.APPDATA || path.join(process.env.HOME || process.env.USERPROFILE || '.', '.config');
+  const moves = [
+    ['.lostcitizens-kit-settings.json', '.lostcitylabsclient-settings.json', base],
+    ['.lostcitizens-kit-stopwatch-config.json', '.lostcitylabsclient-stopwatch-config.json', base],
+    ['.lostcitizens-kit-notes.json', '.lostcitylabsclient-notes.json', base],
+    ['lostcitizens-kit', 'lostcitylabsclient', configBase],
+  ];
+  for (const [from, to, dir] of moves) {
+    try {
+      const src = path.join(dir, from), dest = path.join(dir, to);
+      if (fs.existsSync(src) && !fs.existsSync(dest)) fs.renameSync(src, dest);
+    } catch (e) { console.error('Legacy data migration failed for', from, e); }
+  }
+})();
+
+const settingsPath = path.join(process.env.APPDATA || process.env.HOME || '.', '.lostcitylabsclient-settings.json');
 let appSettings = {
   mainWindow: { width: 1100, height: 920, x: null, y: null },
   zoomFactor: 1, tabZoom: {}, externalZoom: {},
@@ -513,7 +531,7 @@ let backgroundAlertTriggered = false;
 let backgroundAutoLoop = false;
 let backgroundTimerStartTime = null;
 
-const baseWindowTitle = `LostCitizensKit by Blackberry v${version}`;
+const baseWindowTitle = `LostCityLabsClient by Blackberry v${version}`;
 
 // ── World status (latency in titlebar) ──────────────────────────────────────
 let worldStatusInterval = null;
@@ -653,8 +671,8 @@ if (appSettings.afkTimerDuration >= 30 && appSettings.afkTimerDuration <= 600) {
 
 async function loadSoundSettings() {
   try {
-    const soundsDir = path.join(process.env.APPDATA || path.join(process.env.HOME || process.env.USERPROFILE, '.config'), 'lostcitizens-kit', 'sounds');
-    const configPath = path.join(process.env.APPDATA || process.env.HOME, '.lostcitizens-kit-stopwatch-config.json');
+    const soundsDir = path.join(process.env.APPDATA || path.join(process.env.HOME || process.env.USERPROFILE, '.config'), 'lostcitylabsclient', 'sounds');
+    const configPath = path.join(process.env.APPDATA || process.env.HOME, '.lostcitylabsclient-stopwatch-config.json');
     const fsPromises = require('fs').promises;
     const configData = await fsPromises.readFile(configPath, 'utf8');
     const config = JSON.parse(configData);
@@ -669,7 +687,7 @@ loadSoundSettings();
 
 function getScreenshotFolder() {
   let folder = appSettings.screenshotFolder;
-  if (!folder) folder = path.join(app.getPath('pictures'), 'LostCitizensKit adventures');
+  if (!folder) folder = path.join(app.getPath('pictures'), 'LostCityLabsClient adventures');
   if (!fs.existsSync(folder)) {
     try { fs.mkdirSync(folder, { recursive: true }); }
     catch (e) { log.error('Failed to create screenshot folder:', e); folder = app.getPath('pictures'); }
@@ -882,6 +900,7 @@ app.whenReady().then(() => {
     width: savedBounds.width || 1100, height: savedBounds.height || 920,
     x: savedBounds.x != null ? savedBounds.x : undefined,
     y: savedBounds.y != null ? savedBounds.y : undefined,
+    icon: path.join(__dirname, 'assets', 'icon.ico'),
     autoHideMenuBar: true,
     webPreferences: { nodeIntegration: true, contextIsolation: false },
     title: baseWindowTitle
@@ -1017,7 +1036,7 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
     settingsWindow = new BrowserWindow({
       width: settingsBounds.width || 600, height: settingsBounds.height || 500,
       x: settingsBounds.x != null ? settingsBounds.x : undefined, y: settingsBounds.y != null ? settingsBounds.y : undefined,
-      autoHideMenuBar: true, webPreferences: { nodeIntegration: true, contextIsolation: false }, title: 'LostCitizensKit - Settings'
+      autoHideMenuBar: true, webPreferences: { nodeIntegration: true, contextIsolation: false }, title: 'LostCityLabsClient - Settings'
     });
     settingsWindow.loadFile(path.join(__dirname, 'navitems/stopwatch-settings.html'));
     const saveSettingsBounds = () => {
@@ -1088,7 +1107,7 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
 
   // Return the shared sounds directory path
   ipcMain.handle('get-sounds-dir', () => {
-    return path.join(process.env.APPDATA || path.join(process.env.HOME || process.env.USERPROFILE, '.config'), 'lostcitizens-kit', 'sounds');
+    return path.join(process.env.APPDATA || path.join(process.env.HOME || process.env.USERPROFILE, '.config'), 'lostcitylabsclient', 'sounds');
   });
 
   // ── Adventure Capture ───────────────────────────────────────────────────────
@@ -1792,7 +1811,7 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
     soundManagerWindow = new BrowserWindow({
       width: smBounds.width || 450, height: smBounds.height || 500,
       x: smBounds.x != null ? smBounds.x : undefined, y: smBounds.y != null ? smBounds.y : undefined,
-      autoHideMenuBar: true, webPreferences: { nodeIntegration: true, contextIsolation: false }, title: 'LostCitizensKit - Sound Manager'
+      autoHideMenuBar: true, webPreferences: { nodeIntegration: true, contextIsolation: false }, title: 'LostCityLabsClient - Sound Manager'
     });
     soundManagerWindow.loadFile(path.join(__dirname, 'navitems/sound-manager.html'));
     const saveSMBounds = () => {
@@ -1808,10 +1827,10 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
   });
 
   ipcMain.handle('get-sounds-config', async () => {
-    const soundsDir = path.join(process.env.APPDATA || path.join(process.env.HOME || process.env.USERPROFILE, '.config'), 'lostcitizens-kit', 'sounds');
+    const soundsDir = path.join(process.env.APPDATA || path.join(process.env.HOME || process.env.USERPROFILE, '.config'), 'lostcitylabsclient', 'sounds');
     let userVolume = 60, csp = '', sa = false;
     try {
-      const configPath = path.join(process.env.APPDATA || process.env.HOME, '.lostcitizens-kit-stopwatch-config.json');
+      const configPath = path.join(process.env.APPDATA || process.env.HOME, '.lostcitylabsclient-stopwatch-config.json');
       const config = JSON.parse(await require('fs').promises.readFile(configPath, 'utf8'));
       userVolume = config.soundVolume || 60; sa = config.soundAlert || false;
       if (config.customSoundFilename) csp = path.normalize(path.join(soundsDir, config.customSoundFilename));
@@ -1831,7 +1850,7 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
       width: notesBounds.width || 500, height: notesBounds.height || 600,
       x: notesBounds.x != null ? notesBounds.x : undefined, y: notesBounds.y != null ? notesBounds.y : undefined,
       minWidth: 350, minHeight: 300, autoHideMenuBar: true,
-      webPreferences: { nodeIntegration: true, contextIsolation: false }, title: 'LostCitizensKit - Notes'
+      webPreferences: { nodeIntegration: true, contextIsolation: false }, title: 'LostCityLabsClient - Notes'
     });
     notesWindow.loadFile(path.join(__dirname, 'navitems/notes.html'));
     const saveNotesBounds = () => {
@@ -1848,7 +1867,7 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
   });
   ipcMain.on('save-notes-window-size', async (event, { width, height }) => {
     try {
-      const notesPath = path.join(process.env.APPDATA || process.env.HOME, '.lostcitizens-kit-notes.json');
+      const notesPath = path.join(process.env.APPDATA || process.env.HOME, '.lostcitylabsclient-notes.json');
       const fsP = require('fs').promises;
       let data = {};
       try { data = JSON.parse(await fsP.readFile(notesPath, 'utf8')); } catch (e) {}
@@ -1857,11 +1876,11 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
     } catch (e) { console.log('Error saving notes window size:', e); }
   });
   ipcMain.handle('load-notes', async () => {
-    try { return JSON.parse(await require('fs').promises.readFile(path.join(process.env.APPDATA || process.env.HOME, '.lostcitizens-kit-notes.json'), 'utf8')); }
+    try { return JSON.parse(await require('fs').promises.readFile(path.join(process.env.APPDATA || process.env.HOME, '.lostcitylabsclient-notes.json'), 'utf8')); }
     catch (e) { return {}; }
   });
   ipcMain.on('save-notes', async (event, notes) => {
-    try { await require('fs').promises.writeFile(path.join(process.env.APPDATA || process.env.HOME, '.lostcitizens-kit-notes.json'), JSON.stringify(notes, null, 2)); }
+    try { await require('fs').promises.writeFile(path.join(process.env.APPDATA || process.env.HOME, '.lostcitylabsclient-notes.json'), JSON.stringify(notes, null, 2)); }
     catch (e) { console.log('Error saving notes:', e); }
   });
 
@@ -2111,7 +2130,7 @@ ipcMain.on('save-screenshot', (event, dataUrl) => {
   ipcMain.handle('fetch-url-for-channel-id', async (event, url) => {
     try {
       const response = await fetch(url, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; LostCitizensKit)' }
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; LostCityLabsClient)' }
       });
       if (!response.ok) return null;
       return await response.text();

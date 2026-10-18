@@ -7,7 +7,7 @@ module.exports = {
         icon: 'src/assets/icon',
         outDir: 'out',
         win32metadata: {
-            ProductName: 'LostCitizensKit by Blackberry'
+            ProductName: 'LostCityLabsClient by Blackberry'
         }
     },
     rebuildConfig: {},
@@ -23,7 +23,7 @@ module.exports = {
         {
             name: '@electron-forge/maker-zip',
             config: {
-                bin: 'LostCitizensKit'
+                bin: 'LostCityLabsClient'
             }
         }
     ],

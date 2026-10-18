@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <radialGradient id="transLensGrad" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#9fd6f0" stop-opacity="0.45"/>
+    </radialGradient>
+  </defs>
+
+  <!-- ledger page -->
+  <rect x="3" y="3" width="19" height="25" rx="1.5" fill="#f4e4c1" stroke="#4a3a1a" stroke-width="0.75"/>
+  <rect x="3" y="3" width="19" height="4" rx="1.5" fill="#7a1f1f" stroke="#4a1010" stroke-width="0.75"/>
+
+  <!-- ledger lines -->
+  <rect x="6" y="10" width="13" height="1.5" fill="#8a7a55"/>
+  <rect x="6" y="14" width="10" height="1.5" fill="#8a7a55"/>
+  <rect x="6" y="18" width="13" height="1.5" fill="#8a7a55"/>
+  <rect x="6" y="22" width="8" height="1.5" fill="#8a7a55"/>
+
+  <!-- magnifier handle -->
+  <path d="M22.5 22.5 L29 29" stroke="#4a1010" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M22.5 22.5 L29 29" stroke="#7a1f1f" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- magnifier lens -->
+  <circle cx="18" cy="18" r="7" fill="url(#transLensGrad)" stroke="#b8860b" stroke-width="2"/>
+  <circle cx="18" cy="18" r="7" fill="none" stroke="#4a3a1a" stroke-width="0.6"/>
+
+  <!-- lens glint -->
+  <path d="M14.5 15.5 Q15.5 13.5 18 13" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+</svg>
