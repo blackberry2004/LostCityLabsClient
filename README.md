@@ -6,14 +6,20 @@ Originally based on 05x Client by Akg, modified by Blackberry to point at LostCi
 
 ## Features
 
-- **World switcher** — jump between World 1–4 without leaving the app.
-- **Highscores, Clue Help, World Map, Quest Guides, Skill Guides, Skills Calculator, Bestiary, Item Database** — reference tools open in their own tabs alongside the game.
+- **World switcher** — jump between World 1–3 without leaving the app, with live player counts and latency per world. World 3 is marked **(PVP)** in red.
+- **Highscores, Trading Post, Transparency, Clue Help, World Map, Quest Guides, Skill Guides, Skills Calculator, Bestiary, Item Database** — reference tools open in their own tabs alongside the game, each with an arrow to open it in a separate window instead. Trading Post, Transparency, Bestiary and World Map point at their `lostcitylabs.com` pages.
 - **Stopwatch / AFK timer** — countdown, stopwatch, and AFK-detection modes, with an optional alert sound and a live timer shown right in the window title.
 - **Screenshot capture** — one-key screenshots, auto-sorted into a folder per world, with an optional capture sound.
 - **Notes** — a small persistent scratchpad window.
 - **Creator notifications** — desktop notifications when tracked YouTube creators go live or post a new video.
 - **Quick-login accounts** — store multiple accounts and hop between them with hotkeys.
-- **Collapsible / strip-mode nav panel**, per-tab zoom, and a few other window-management niceties.
+- **Collapsible / strip-mode nav panel**, per-tab zoom, and a few other window-management niceties. Individual nav buttons can be hidden from Settings → Appearance.
+
+## UI
+
+The interface has a modern dark theme: flat rounded controls, thin borders, a single gold accent, and the Segoe UI system font. The look is driven by design tokens (colors, radii, fonts) in `src/theme.css`, shared by every window, with component styles in `src/main.css`, so changing the accent color or corner radius is a one-line edit.
+
+The original RuneScape pixel font is still available: Settings → Appearance → **Interface Font** switches between *Modern* (default) and *Classic RuneScape*.
 
 ## Requirements
 
@@ -105,9 +111,11 @@ LostCityLabsClient stores its settings and per-feature data in your OS user-data
 
 Deleting these resets the app to defaults; nothing under the install directory itself needs to be touched.
 
+Data from earlier builds (named `LostCitizensKit`, e.g. `.lostcitizens-kit-settings.json`) is migrated automatically on first launch by renaming those files and the sounds folder to the names above.
+
 ## Contributing
 
-Issues and pull requests are welcome. Please avoid committing anything under `node_modules/`, `out/`, or `dist/` — these are already covered by `.gitignore`.
+Issues and pull requests are welcome at [blackberry2004/LostCityLabsClient](https://github.com/blackberry2004/LostCityLabsClient). Please avoid committing anything under `node_modules/`, `out/`, or `dist/` — these are already covered by `.gitignore`.
 
 ## License
 

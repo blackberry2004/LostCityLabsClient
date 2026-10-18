@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8" />
   <link rel="stylesheet" type="text/css" href="main.css" />
 </head>
 <body>
-  <div id="tabs-bar" style="width: 100%; display: flex; align-items: stretch;">
-    <div id="tabs" style="overflow-x: auto; white-space: nowrap; flex: 1 1 auto; display: flex; align-items: stretch;">
-      <button id="nav-panel-toggle" style="display: flex; align-items: center; justify-content: center; font-size: 22px; border: none; background: #8b6914; color: #fff; border-radius: 8px 0 0 8px; width: 36px; height: 36px; cursor: pointer; margin-right: 4px; transition: background 0.2s;">&gt;</button>
-      <button id="nav-panel-strip-toggle" title="Toggle strip mode" style="display: flex; align-items: center; justify-content: center; font-size: 16px; border: none; background: #3d2807; color: #fff; border-radius: 6px; width: 36px; height: 36px; cursor: pointer; margin-right: 8px; transition: background 0.15s;">≡</button>
+  <div id="tabs-bar">
+    <div id="tabs">
+      <button id="nav-panel-toggle" class="tab-tool is-on" title="Show / hide side panel">&#8250;</button>
+      <button id="nav-panel-strip-toggle" class="tab-tool" title="Toggle strip mode">&#8801;</button>
+      <span class="tab-sep"></span>
       <div class="tab active" data-id="main">W2 HD</div>
     </div>
   </div>
@@ -19,12 +21,8 @@
 
     const navPanelToggleBtn = document.getElementById('nav-panel-toggle');
     function setNavPanelToggleState(collapsed) {
-      navPanelToggleBtn.textContent = collapsed ? '<' : '>';
-      navPanelToggleBtn.style.alignItems = 'center';
-      navPanelToggleBtn.style.justifyContent = 'center';
-      navPanelToggleBtn.style.background = collapsed ? 'transparent' : '#8b6914';
-      navPanelToggleBtn.style.color = collapsed ? '#8b6914' : '#fff';
-      navPanelToggleBtn.style.border = collapsed ? '2px solid #8b6914' : 'none';
+      navPanelToggleBtn.textContent = collapsed ? '‹' : '›';
+      navPanelToggleBtn.classList.toggle('is-on', !collapsed);
 
       // Actually hide/show the nav panel
       const navPanel = document.getElementById('nav-panel');
@@ -54,13 +52,8 @@
     require('electron').ipcRenderer.on('nav-panel-mode', (event, mode) => {
       const btn = document.getElementById('nav-panel-strip-toggle');
       if (!btn) return;
-      if (mode === 'strip') {
-        btn.style.background = '#51cf66';
-        btn.title = 'Strip mode enabled';
-      } else {
-        btn.style.background = '#3d2807';
-        btn.title = 'Enable strip mode';
-      }
+      btn.classList.toggle('is-on', mode === 'strip');
+      btn.title = mode === 'strip' ? 'Strip mode enabled' : 'Enable strip mode';
     });
     // Set initial state (in case of reload)
     setNavPanelToggleState(navPanelCollapsed);

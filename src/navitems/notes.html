@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="../theme.css" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; overflow: hidden; }
 
         @font-face {
-            font-family: 'RS-Bold';
+            font-family: var(--font-ui);
             src: url('../assets/fonts/RuneScape-Bold-12.otf') format('opentype');
         }
         @font-face {
-            font-family: 'RS-Plain';
+            font-family: var(--font-ui);
             src: url('../assets/fonts/RuneScape-Plain-12.otf') format('opentype');
         }
 
         :root {
-            --gold:        #f0e68c;
-            --gold-dim:    #b8a060;
-            --gold-border: #8b6914;
+            --gold:        var(--text);
+            --gold-dim:    var(--text-dim);
+            --gold-border: var(--accent);
             --gold-deep:   #5a4209;
-            --bg:          #1a1a1a;
+            --bg:          var(--bg-0);
             --bg-panel:    #222222;
-            --bg-input:    #2a2a2a;
+            --bg-input:    var(--bg-2);
             --bg-hover:    #2f2f2f;
             --bg-active:   #333320;
-            --text:        #f0e68c;
+            --text:        var(--text);
             --text-dim:    #888;
             --danger:      #c0392b;
             --danger-h:    #e74c3c;
@@ -32,7 +33,7 @@
         }
 
         body {
-            font-family: 'RS-Bold', monospace;
+            font-family: var(--font-ui);
             background: var(--bg);
             color: var(--text);
             display: flex;
@@ -68,7 +69,7 @@
             border-right: 1px solid var(--gold-deep);
             cursor: pointer;
             font-size: 13px;
-            font-family: 'RS-Bold', monospace;
+            font-family: var(--font-ui);
             color: var(--text-dim);
             flex-shrink: 0;
             position: relative;
@@ -106,7 +107,7 @@
             border: 1px solid var(--gold-border);
             border-radius: 2px;
             color: var(--gold);
-            font-family: 'RS-Bold', monospace;
+            font-family: var(--font-ui);
             font-size: 11px;
             padding: 1px 4px;
             min-width: 0;
@@ -169,15 +170,15 @@
 
         .tb-btn {
             padding: 5px 14px;
-            background: url('../assets/button.jpg') repeat;
+            background: var(--bg-2);
             background-size: auto;
-            border: 2px outset var(--gold-border);
+            border: 1px solid var(--line-strong);
             border-radius: var(--radius);
             color: var(--gold);
-            font-family: 'RS-Bold', monospace;
+            font-family: var(--font-ui);
             font-size: 13px;
             cursor: pointer;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            
             line-height: 1.4;
             transition: transform 0.1s;
         }
@@ -219,7 +220,7 @@
             background: var(--bg);
             border: none;
             color: var(--gold);
-            font-family: 'RS-Plain', monospace;
+            font-family: var(--font-ui);
             font-size: 14px;
             resize: none;
             outline: none;
@@ -248,7 +249,7 @@
             flex-shrink: 0;
         }
 
-        .status-bar span { font-family: 'RS-Plain', monospace; }
+        .status-bar span { font-family: var(--font-ui); }
 
         /* ── EMPTY STATE ──────────────────────────────────────── */
         .empty-state {

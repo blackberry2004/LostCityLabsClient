@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
+  <link rel="stylesheet" type="text/css" href="theme.css" />
+    <style>
     @font-face {
-      font-family: 'RS-Bold';
+      font-family: var(--font-ui);
       src: url('assets/fonts/RuneScape-Bold-12.otf') format('opentype');
     }
 
@@ -16,7 +17,7 @@
     body {
       background: transparent;
       overflow: hidden;
-      font-family: 'RS-Bold', monospace;
+      font-family: var(--font-ui);
       user-select: none;
       display: flex;
       align-items: center;
@@ -82,7 +83,7 @@
       padding: 4px 8px;
       cursor: pointer;
       font-size: 10px;
-      font-family: 'RS-Bold', monospace;
+      font-family: var(--font-ui);
       border-radius: 3px;
       transition: all 0.1s;
       -webkit-app-region: no-drag;

@@ -3,84 +3,69 @@
 <head>
     <link rel="stylesheet" type="text/css" href="../main.css" />
     <style>
-        @font-face {
-            font-family: 'RS-Quill';
-            src: url('../assets/fonts/RuneScape-Quill-8.otf') format('opentype');
-        }
-
         /* ── Base ───────────────────────────────────────────────────────────── */
-        *, *::before, *::after { box-sizing: border-box; }
-
-        body {
-            background: #141414;
-            color: #f0e68c;
-            font-family: 'RS-Plain', sans-serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
+        body { margin: 0; padding: 0; min-height: 100vh; }
 
         /* ── Sticky header ───────────────────────────────────────────────────── */
         .settings-header {
             position: sticky;
             top: 0;
             z-index: 10;
-            background: linear-gradient(180deg, #1e1c18 0%, #18160e 100%);
-            border-bottom: 2px solid #8b6914;
-            padding: 14px 20px 0;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+            background: var(--bg-1);
+            border-bottom: 1px solid var(--line);
+            padding: 16px 20px 0;
         }
 
         .settings-title {
-            font-size: 17px;
-            font-family: 'RS-Bold', sans-serif;
-            color: #f0e68c;
-            text-align: center;
-            letter-spacing: 1px;
-            text-shadow: 0 0 12px rgba(139,105,20,0.5), 1px 1px 2px #000;
-            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 14px;
         }
 
         /* ── Tab bar ─────────────────────────────────────────────────────────── */
         .tab-bar {
             display: flex;
-            gap: 2px;
-            margin-bottom: -2px;
+            gap: 4px;
+            margin-bottom: -1px;
         }
 
         .tab-btn {
-            padding: 7px 16px 9px;
+            padding: 8px 14px 10px;
+            min-height: 0;
             background: transparent;
             border: none;
-            border-bottom: 3px solid transparent;
-            color: #666;
-            font-family: 'RS-Plain', sans-serif;
-            font-size: 12px;
+            border-bottom: 2px solid transparent;
+            color: var(--text-dim);
+            font-size: 12.5px;
+            font-weight: 500;
             cursor: pointer;
-            transition: color 0.15s, border-color 0.15s;
-            border-radius: 0;
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
             transform: none;
-            letter-spacing: 0.3px;
         }
         .tab-btn:hover {
-            color: #c8a84a;
-            background: transparent;
+            color: var(--text);
+            background: var(--bg-2);
             border: none;
-            border-bottom: 3px solid #5a4510;
+            border-bottom: 2px solid var(--line-strong);
             transform: none;
         }
         .tab-btn.active {
-            color: #f0e68c;
-            border-bottom: 3px solid #c8941c;
+            color: var(--accent);
             background: transparent;
-            text-shadow: 0 0 8px rgba(200,148,28,0.4);
+            border: none;
+            border-bottom: 2px solid var(--accent);
         }
 
         /* ── Scroll area ─────────────────────────────────────────────────────── */
         .settings-container {
-            max-width: 420px;
+            max-width: 440px;
             margin: 0 auto;
-            padding: 18px 16px 24px;
+            padding: 18px 16px 28px;
         }
 
         .tab-panel { display: none; }
@@ -88,25 +73,20 @@
 
         /* ── Section cards ───────────────────────────────────────────────────── */
         .folder-section {
-            background: linear-gradient(180deg, #1e1e1e 0%, #191919 100%);
-            border: 1px solid #3a3220;
-            border-top: 2px solid #5a4510;
-            border-radius: 0 0 6px 6px;
-            padding: 14px 14px 10px;
-            margin-bottom: 14px;
-            box-shadow: inset 0 1px 0 rgba(139,105,20,0.08), 0 2px 8px rgba(0,0,0,0.3);
+            background: var(--bg-1);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 14px 14px 8px;
+            margin-bottom: 12px;
         }
 
         .section-label {
-            font-family: 'RS-Bold', sans-serif;
+            margin-bottom: 12px;
             font-size: 11px;
-            font-weight: bold;
+            font-weight: 700;
             letter-spacing: 0.8px;
             text-transform: uppercase;
-            color: #c8941c;
-            margin-bottom: 12px;
-            padding-bottom: 6px;
-            border-bottom: 1px solid rgba(139,105,20,0.25);
+            color: var(--text-dim);
         }
 
         /* ── Rows ────────────────────────────────────────────────────────────── */
@@ -119,25 +99,13 @@
         }
         .setting-row label {
             min-width: 120px;
-            font-size: 12px;
-            color: #d4c070;
+            font-size: 12.5px;
+            color: var(--text-dim);
         }
         .setting-row input[type="text"] {
             flex: 1;
-            padding: 5px 8px;
-            background: #111;
-            border: 1px solid #4a3c10;
-            border-radius: 3px;
-            color: #f0e68c;
-            font-family: 'RS-Plain', sans-serif;
-            font-size: 11px;
             min-width: 150px;
-            transition: border-color 0.15s;
-        }
-        .setting-row input[type="text"]:focus {
-            outline: none;
-            border-color: #8b6914;
-            background: #161610;
+            font-size: 12px;
         }
 
         /* ── Range ───────────────────────────────────────────────────────────── */
@@ -147,16 +115,14 @@
             gap: 8px;
             flex: 1;
         }
-        .range-wrapper input[type="range"] {
-            flex: 1;
-            accent-color: #8b6914;
-        }
+        .range-wrapper input[type="range"] { flex: 1; }
         .range-value {
             min-width: 44px;
             text-align: right;
             font-size: 12px;
-            color: #4CAF50;
-            font-family: 'RS-Bold', sans-serif;
+            font-weight: 700;
+            color: var(--accent);
+            font-variant-numeric: tabular-nums;
         }
 
         /* ── Checkbox toggle ─────────────────────────────────────────────────── */
@@ -165,80 +131,53 @@
             align-items: center;
             gap: 8px;
             cursor: pointer;
-            font-size: 12px;
-            color: #d4c070;
+            font-size: 12.5px;
+            color: var(--text);
             flex: 1;
             user-select: none;
         }
         .sound-checkbox-label input[type="checkbox"] { display: none; }
         .sound-checkmark {
-            width: 16px;
-            height: 16px;
-            border: 1px solid #5a4510;
-            border-radius: 3px;
-            background: #111;
+            width: 18px;
+            height: 18px;
+            border: 1px solid var(--line-strong);
+            border-radius: 5px;
+            background: var(--bg-0);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
             transition: border-color 0.15s, background 0.15s;
         }
-        .sound-checkbox-label:hover .sound-checkmark {
-            border-color: #8b6914;
-        }
+        .sound-checkbox-label:hover .sound-checkmark { border-color: var(--accent-line); }
         .sound-checkbox-label input[type="checkbox"]:checked + .sound-checkmark {
-            background: #1a3a1a;
-            border-color: #4CAF50;
+            background: var(--accent);
+            border-color: var(--accent);
         }
         .sound-checkbox-label input[type="checkbox"]:checked + .sound-checkmark::after {
             content: '✓';
-            color: #4CAF50;
-            font-size: 10px;
-            line-height: 1;
-        }
-
-        /* ── Buttons ─────────────────────────────────────────────────────────── */
-        button {
-            padding: 6px 14px;
-            background: url('../assets/button.jpg') repeat;
-            background-size: cover;
-            border: 2px outset #8b6914;
-            border-radius: 4px;
-            color: #f0e68c;
-            font-family: 'RS-Plain', sans-serif;
-            font-weight: bold;
+            color: var(--on-accent);
             font-size: 12px;
-            cursor: pointer;
-            transition: transform 0.1s, border 0.1s;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-        }
-        button:hover {
-            border: 2px inset #8b6914;
-            background-color: rgba(139,105,20,0.25);
-            transform: translateY(1px);
-        }
-        button:active {
-            border: 2px inset #8b6914;
-            transform: translateY(2px);
+            font-weight: 700;
+            line-height: 1;
         }
 
         /* ── Status text ─────────────────────────────────────────────────────── */
         .status-text {
             font-size: 11px;
-            color: #555;
+            color: var(--text-faint);
             margin-top: 6px;
             text-align: center;
         }
-        .status-text.active { color: #51cf66; }
+        .status-text.active { color: var(--good); }
 
         /* ── Font option cards (Appearance tab) ──────────────────────────────── */
         label[id^="font-opt-"] {
-            background: #111 !important;
-            border-color: #333 !important;
+            background: var(--bg-0) !important;
+            border-color: var(--line-strong) !important;
+            border-radius: var(--radius-sm) !important;
         }
-        label[id^="font-opt-"]:hover {
-            border-color: #5a4510 !important;
-        }
+        label[id^="font-opt-"]:hover { border-color: var(--accent-line) !important; }
     </style>
 </head>
 <body>
@@ -362,7 +301,7 @@
                     <button onclick="toggleScreenshotSoundManager();" style="flex: 1;">Manage</button>
                 </div>
             </div>
-            <div id="screenshot-sound-label" style="font-size: 10px; color: #b8a060; margin-bottom: 6px; padding-left: 4px;">Using default (Bloom)</div>
+            <div id="screenshot-sound-label" style="font-size: 10px; color: var(--text-dim); margin-bottom: 6px; padding-left: 4px;">Using default (Bloom)</div>
             <input type="file" id="screenshot-sound-input" accept="audio/*" style="display: none;">
 
             <!-- Sound list -->
@@ -381,7 +320,7 @@
         <div id="tab-accounts" class="tab-panel">
             <div class="folder-section">
                 <div class="section-label">Quick Login Accounts</div>
-                <div style="color:#b8a060;font-size:11px;margin-bottom:10px;line-height:1.5;">
+                <div style="color:var(--text-dim);font-size:11px;margin-bottom:10px;line-height:1.5;">
                     Save accounts and give each a hotkey. On the game's login screen (with the
                     username and password fields showing), press the hotkey to log in automatically.
                 </div>
@@ -389,7 +328,7 @@
                     🔒 Passwords are encrypted on this PC under your Windows account. They are stored
                     locally and never sent anywhere.
                 </div>
-                <div id="accounts-enc-warning" style="display:none;margin-bottom:10px;padding:8px 10px;background:#2a1a00;border:1px solid #c8941c;border-radius:4px;font-size:11px;color:#c8941c;line-height:1.5;">
+                <div id="accounts-enc-warning" style="display:none;margin-bottom:10px;padding:8px 10px;background:#2a1a00;border:1px solid var(--accent);border-radius:4px;font-size:11px;color:var(--accent);line-height:1.5;">
                     ⚠ Secure storage is unavailable on this system, so passwords can't be saved safely. Account login is disabled.
                 </div>
                 <div id="accounts-list" style="display:flex;flex-direction:column;gap:8px;"></div>
@@ -399,7 +338,7 @@
             </div>
 
             <!-- Account editor (hidden until adding/editing) -->
-            <div id="account-form-section" class="folder-section" style="display:none;border-top:2px solid #c8941c;">
+            <div id="account-form-section" class="folder-section" style="display:none;border-top:2px solid var(--accent);">
                 <div class="section-label" id="account-form-title">Add Account</div>
                 <div class="setting-row">
                     <label>Username:</label>
@@ -420,7 +359,7 @@
                 <div id="account-form-status" class="status-text"></div>
                 <div class="setting-row" style="justify-content:flex-end;gap:6px;margin-top:6px;">
                     <button onclick="cancelAccountForm()">Cancel</button>
-                    <button onclick="saveAccountForm()" style="background:#1a3a1a;border-color:#51cf66;color:#51cf66;">Save</button>
+                    <button onclick="saveAccountForm()" style="background:#1a3a1a;border-color:var(--good);color:var(--good);">Save</button>
                 </div>
             </div>
         </div><!-- end tab-accounts -->
@@ -429,35 +368,35 @@
         <div id="tab-appearance" class="tab-panel">
             <div class="folder-section">
                 <div class="section-label">Interface Font</div>
-                <div style="color: #b8a060; font-size: 11px; margin-bottom: 12px; line-height: 1.5;">
-                    Changes the default font used across the entire interface.<br>
+                <div style="color: var(--text-dim); font-size: 11px; margin-bottom: 12px; line-height: 1.5;">
+                    Choose the modern interface font or the classic RuneScape look.<br>
                     Takes effect immediately and is saved for future sessions.
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border: 2px solid #555; border-radius: 4px; transition: border-color 0.15s;" id="font-opt-quill">
-                        <input type="radio" name="appFont" value="quill" id="font-radio-quill" style="accent-color: #8b6914; width: 16px; height: 16px; cursor: pointer;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border: 2px solid var(--line-strong); border-radius: 4px; transition: border-color 0.15s;" id="font-opt-quill">
+                        <input type="radio" name="appFont" value="quill" id="font-radio-quill" style="accent-color: var(--accent); width: 16px; height: 16px; cursor: pointer;">
                         <div>
-                            <div style="font-size: 14px; color: #f0e68c; font-weight: bold;">RuneScape Quill</div>
-                            <div style="font-size: 11px; color: #888; margin-top: 2px;">Default handwritten style (RuneScape-Quill-8)</div>
+                            <div style="font-size: 14px; color: var(--text); font-weight: bold;">Modern</div>
+                            <div style="font-size: 11px; color: #888; margin-top: 2px;">Clean system font (default)</div>
                         </div>
                     </label>
 
-                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border: 2px solid #555; border-radius: 4px; transition: border-color 0.15s;" id="font-opt-bold">
-                        <input type="radio" name="appFont" value="bold" id="font-radio-bold" style="accent-color: #8b6914; width: 16px; height: 16px; cursor: pointer;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 10px; border: 2px solid var(--line-strong); border-radius: 4px; transition: border-color 0.15s;" id="font-opt-bold">
+                        <input type="radio" name="appFont" value="bold" id="font-radio-bold" style="accent-color: var(--accent); width: 16px; height: 16px; cursor: pointer;">
                         <div>
-                            <div style="font-size: 14px; color: #f0e68c; font-weight: bold;">RuneScape Bold</div>
-                            <div style="font-size: 11px; color: #888; margin-top: 2px;">Cleaner, more readable style (RuneScape-Bold-12)</div>
+                            <div style="font-size: 14px; color: var(--text); font-weight: bold;">Classic RuneScape</div>
+                            <div style="font-size: 11px; color: #888; margin-top: 2px;">Original pixel-style font (RuneScape-Bold-12)</div>
                         </div>
                     </label>
                 </div>
 
-                <div id="font-apply-status" style="margin-top: 10px; font-size: 11px; color: #4CAF50; min-height: 16px;"></div>
+                <div id="font-apply-status" style="margin-top: 10px; font-size: 11px; color: var(--good); min-height: 16px;"></div>
             </div>
 
             <div class="folder-section">
                 <div class="section-label">Navigation Buttons</div>
-                <div style="color:#b8a060;font-size:11px;margin-bottom:12px;line-height:1.5;">
+                <div style="color:var(--text-dim);font-size:11px;margin-bottom:12px;line-height:1.5;">
                     Uncheck buttons to hide them from the sidebar. Hidden buttons are removed and the rest reflow automatically.
                 </div>
                 <div id="nav-buttons-list" style="display:flex;flex-direction:column;gap:6px;"></div>
@@ -487,12 +426,12 @@
             </div>
             <div class="folder-section">
                 <div class="section-label">Background Check Interval</div>
-                <div style="color:#b8a060;font-size:11px;margin-bottom:10px;line-height:1.5;">
+                <div style="color:var(--text-dim);font-size:11px;margin-bottom:10px;line-height:1.5;">
                     How often to check for live streams and new videos in the background.
                 </div>
                 <div class="setting-row">
                     <label style="flex:1;">Check every</label>
-                    <select id="poll-interval-select" style="background:#2a2a2a;border:2px solid #8b6914;border-radius:3px;color:#f0e68c;font-size:12px;padding:4px 8px;cursor:pointer;">
+                    <select id="poll-interval-select" style="background:var(--bg-2);border:2px solid var(--accent);border-radius:3px;color:var(--text);font-size:12px;padding:4px 8px;cursor:pointer;">
                         <option value="10000">10 seconds</option>
                         <option value="30000">30 seconds</option>
                         <option value="60000">1 minute</option>
@@ -591,8 +530,8 @@
         });
 
         function updateFontOptionStyles(val) {
-            document.getElementById('font-opt-quill').style.borderColor = val === 'quill' ? '#8b6914' : '#555';
-            document.getElementById('font-opt-bold').style.borderColor  = val === 'bold'  ? '#8b6914' : '#555';
+            document.getElementById('font-opt-quill').style.borderColor = val === 'quill' ? 'var(--accent)' : 'var(--line-strong)';
+            document.getElementById('font-opt-bold').style.borderColor  = val === 'bold'  ? 'var(--accent)' : 'var(--line-strong)';
         }
 
         function updateStatus() {
@@ -638,10 +577,10 @@
             if (screenshotCustomSoundPath) {
                 const parts = screenshotCustomSoundPath.replace(/\\/g, '/').split('/');
                 screenshotSoundLabel.textContent = 'Custom: ' + parts[parts.length - 1];
-                screenshotSoundLabel.style.color = '#51cf66';
+                screenshotSoundLabel.style.color = 'var(--good)';
             } else {
                 screenshotSoundLabel.textContent = 'Using default (Bloom)';
-                screenshotSoundLabel.style.color = '#b8a060';
+                screenshotSoundLabel.style.color = 'var(--text-dim)';
             }
         }
 
@@ -711,7 +650,7 @@
                     // Default option
                     const defBtn = document.createElement('div');
                     const isDefault = !screenshotCustomSoundPath;
-                    defBtn.style.cssText = `padding: 6px; background: ${isDefault ? '#3a5a3a' : '#2a2a2a'}; border: 1px solid #555; border-radius: 2px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 10px; color: #f0e68c;`;
+                    defBtn.style.cssText = `padding: 6px; background: ${isDefault ? '#3a5a3a' : 'var(--bg-2)'}; border: 1px solid var(--line-strong); border-radius: 2px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--text);`;
                     defBtn.innerHTML = '<span style="flex:1;">Default (Bloom)</span>';
                     defBtn.onclick = () => {
                         screenshotCustomSoundPath = '';
@@ -726,7 +665,7 @@
                         const isActive = screenshotCustomSoundPath === fullPath;
 
                         const row = document.createElement('div');
-                        row.style.cssText = `padding: 6px; background: ${isActive ? '#3a5a3a' : '#2a2a2a'}; border: 1px solid #555; border-radius: 2px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 10px; color: #f0e68c;`;
+                        row.style.cssText = `padding: 6px; background: ${isActive ? '#3a5a3a' : 'var(--bg-2)'}; border: 1px solid var(--line-strong); border-radius: 2px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--text);`;
 
                         const nameSpan = document.createElement('span');
                         nameSpan.style.flex = '1';
@@ -826,18 +765,18 @@
             NAV_BUTTONS.forEach(btn => {
                 const isVisible = !hiddenNavButtons.includes(btn.id);
                 const row = document.createElement('label');
-                row.style.cssText = 'display:flex;align-items:center;gap:10px;cursor:pointer;padding:7px 10px;border:2px solid ' + (isVisible ? '#8b6914' : '#444') + ';border-radius:4px;transition:border-color 0.15s;';
+                row.style.cssText = 'display:flex;align-items:center;gap:10px;cursor:pointer;padding:7px 10px;border:2px solid ' + (isVisible ? 'var(--accent)' : 'var(--line-strong)') + ';border-radius:4px;transition:border-color 0.15s;';
                 row.innerHTML = `
                     <input type="checkbox" ${isVisible ? 'checked' : ''} data-btn-id="${btn.id}"
-                        style="accent-color:#8b6914;width:15px;height:15px;cursor:pointer;">
-                    <span style="font-size:13px;color:#f0e68c;">${btn.label}</span>`;
+                        style="accent-color:var(--accent);width:15px;height:15px;cursor:pointer;">
+                    <span style="font-size:13px;color:var(--text);">${btn.label}</span>`;
                 row.querySelector('input').addEventListener('change', (e) => {
                     if (e.target.checked) {
                         hiddenNavButtons = hiddenNavButtons.filter(id => id !== btn.id);
                     } else {
                         if (!hiddenNavButtons.includes(btn.id)) hiddenNavButtons.push(btn.id);
                     }
-                    row.style.borderColor = e.target.checked ? '#8b6914' : '#444';
+                    row.style.borderColor = e.target.checked ? 'var(--accent)' : 'var(--line-strong)';
                     ipcRenderer.send('set-hidden-nav-buttons', hiddenNavButtons);
                 });
                 list.appendChild(row);
@@ -973,8 +912,8 @@
             isCapturingKeybind = false;
             screenshotKeybind = accel;
             screenshotKeybindInput.value = acceleratorToDisplay(accel);
-            screenshotKeybindInput.style.borderColor = '#8b6914';
-            screenshotKeybindInput.style.background = '#2a2a2a';
+            screenshotKeybindInput.style.borderColor = 'var(--accent)';
+            screenshotKeybindInput.style.background = 'var(--bg-2)';
 
             // Send to main process
             ipcRenderer.send('set-screenshot-keybind', accel);
@@ -986,8 +925,8 @@
             if (isCapturingKeybind) {
                 isCapturingKeybind = false;
                 screenshotKeybindInput.value = screenshotKeybind ? acceleratorToDisplay(screenshotKeybind) : '';
-                screenshotKeybindInput.style.borderColor = '#8b6914';
-                screenshotKeybindInput.style.background = '#2a2a2a';
+                screenshotKeybindInput.style.borderColor = 'var(--accent)';
+                screenshotKeybindInput.style.background = 'var(--bg-2)';
             }
         });
 
@@ -1030,7 +969,7 @@
             }
             accounts.forEach(acc => {
                 const card = document.createElement('div');
-                card.style.cssText = 'background:#161616;border:1px solid #3a3220;border-radius:4px;padding:8px 10px;display:flex;align-items:center;gap:6px;';
+                card.style.cssText = 'background:var(--bg-1);border:1px solid var(--line);border-radius:4px;padding:8px 10px;display:flex;align-items:center;gap:6px;';
 
                 const info = document.createElement('div');
                 info.style.cssText = 'flex:1;min-width:0;';
@@ -1038,8 +977,8 @@
                 const hk = acc.hotkey ? acceleratorToDisplay(acc.hotkey) : 'No hotkey';
                 const passwordTag = acc.hasPassword ? 'Password saved' : 'No password';
                 info.innerHTML =
-                    '<div style="font-size:13px;color:#f0e68c;font-weight:bold;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(name) + '</div>' +
-                    '<div style="font-size:10px;color:#c8941c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(hk) + ' · ' + escapeHtml(passwordTag) + '</div>';
+                    '<div style="font-size:13px;color:var(--text);font-weight:bold;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(name) + '</div>' +
+                    '<div style="font-size:10px;color:var(--accent);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(hk) + ' · ' + escapeHtml(passwordTag) + '</div>';
                 card.appendChild(info);
 
                 const loginBtn = document.createElement('button');
@@ -1056,7 +995,7 @@
                 const delBtn = document.createElement('button');
                 delBtn.textContent = '✕';
                 delBtn.title = 'Delete account';
-                delBtn.style.cssText = 'padding:4px 8px;font-size:11px;background:#3a1414;border-color:#8b2222;color:#ff8888;';
+                delBtn.style.cssText = 'padding:4px 8px;font-size:11px;background:#3a1414;border-color:#8b2222;color:var(--bad);';
                 delBtn.onclick = () => {
                     ipcRenderer.invoke('delete-account', acc.id).then(updated => {
                         accounts = updated || [];
@@ -1111,10 +1050,10 @@
             const status = document.getElementById('account-form-status');
             const existing = editingAccountId ? accounts.find(a => a.id === editingAccountId) : null;
 
-            if (!username) { status.textContent = 'Username is required.'; status.style.color = '#ff8888'; return; }
+            if (!username) { status.textContent = 'Username is required.'; status.style.color = 'var(--bad)'; return; }
             // Require a password for new accounts
             if (!existing && !password) {
-                status.textContent = 'Password is required.'; status.style.color = '#ff8888'; return;
+                status.textContent = 'Password is required.'; status.style.color = 'var(--bad)'; return;
             }
 
             ipcRenderer.invoke('save-account', { id: editingAccountId, username, password, hotkey: accountHotkey })
@@ -1142,15 +1081,15 @@
             isCapturingAccountHotkey = false;
             accountHotkey = accel;
             accountHotkeyInput.value = acceleratorToDisplay(accel);
-            accountHotkeyInput.style.borderColor = '#8b6914';
-            accountHotkeyInput.style.background = '#2a2a2a';
+            accountHotkeyInput.style.borderColor = 'var(--accent)';
+            accountHotkeyInput.style.background = 'var(--bg-2)';
         });
         accountHotkeyInput.addEventListener('blur', () => {
             if (isCapturingAccountHotkey) {
                 isCapturingAccountHotkey = false;
                 accountHotkeyInput.value = accountHotkey ? acceleratorToDisplay(accountHotkey) : '';
-                accountHotkeyInput.style.borderColor = '#8b6914';
-                accountHotkeyInput.style.background = '#2a2a2a';
+                accountHotkeyInput.style.borderColor = 'var(--accent)';
+                accountHotkeyInput.style.background = 'var(--bg-2)';
             }
         });
         function clearAccountHotkey() {

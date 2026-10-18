@@ -402,10 +402,14 @@ function startCreatorPolling() {
 }
 
 // ── Font injection ────────────────────────────────────────────────────────────
-// Font injection — switches between RS-Quill (default) and RS-Bold.
+// Font injection — modern theme font by default, optional classic RuneScape Bold.
 const FONT_STYLE_ID = '__lk-font-override__';
 
 function buildFontCSS(font) {
+  // Default is the modern UI font from theme.css: nothing to inject.
+  // Only the opt-in classic RuneScape font needs overrides.
+  if (font !== 'bold') return '';
+
   // Shared rules applied in BOTH font modes:
   //  - Stopwatch mode-btn: pin to a small explicit size so the generic
   //    "button { font-size !important }" rule never blows it up.
@@ -739,7 +743,7 @@ function updateBounds() {
   const [rawWidth, rawHeight] = mainWindow.getContentSize();
   const width = Math.max(0, rawWidth);
   const height = Math.max(0, rawHeight);
-  const tabHeight = Math.min(28, height);
+  const tabHeight = Math.min(36, height);
   const navWidth = navPanelMode === 'collapsed'
     ? 0
     : (navPanelMode === 'strip' ? NAV_PANEL_STRIP_WIDTH : Math.min(NAV_PANEL_WIDTH, width));

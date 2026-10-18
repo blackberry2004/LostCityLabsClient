@@ -1,0 +1,113 @@
+/* ==========================================================================
+   LostCityLabsClient - shared theme
+   Design tokens + base controls. Loaded by every window so the whole app
+   shares one look. To revert the redesign: git checkout pre-redesign-checkpoint
+   ========================================================================== */
+
+:root {
+    /* surfaces */
+    --bg-0: #0d0f14;           /* window / deepest */
+    --bg-1: #12151c;           /* panels */
+    --bg-2: #181c25;           /* raised: buttons, cards */
+    --bg-3: #1f2430;           /* hover */
+    --bg-4: #2a3040;           /* pressed / selected */
+
+    /* lines */
+    --line: rgba(255, 255, 255, 0.07);
+    --line-strong: rgba(255, 255, 255, 0.14);
+
+    /* text */
+    --text: #e8eaf0;
+    --text-dim: #9aa1b2;
+    --text-faint: #636a7c;
+
+    /* accent (warm gold, a nod to the old look) */
+    --accent: #e3b341;
+    --accent-hover: #f0c765;
+    --accent-soft: rgba(227, 179, 65, 0.14);
+    --accent-line: rgba(227, 179, 65, 0.45);
+    --on-accent: #1a1405;
+
+    /* status */
+    --good: #3fb97a;
+    --warn: #f0a23b;
+    --bad: #f0594f;
+    --info: #4c9aff;
+
+    /* shape + motion */
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    --ease: 140ms cubic-bezier(0.2, 0, 0, 1);
+
+    --font-ui: 'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'Cascadia Mono', 'Consolas', ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    background: var(--bg-0);
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Thin, unobtrusive scrollbars */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg-4); border-radius: 8px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: #3a4156; background-clip: padding-box; border: 2px solid transparent; }
+
+::selection { background: var(--accent-soft); }
+
+/* ---- Buttons ---- */
+button, .btn {
+    font-family: var(--font-ui);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--bg-2);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    padding: 7px 14px;
+    min-height: 32px;
+    cursor: pointer;
+    transition: background var(--ease), border-color var(--ease), color var(--ease), transform var(--ease);
+}
+button:hover, .btn:hover { background: var(--bg-3); border-color: var(--accent-line); }
+button:active, .btn:active { background: var(--bg-4); transform: translateY(1px); }
+button:focus-visible, .btn:focus-visible,
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--accent-line);
+    outline-offset: 1px;
+}
+button:disabled, .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ---- Inputs ---- */
+input[type="text"], input[type="number"], input[type="search"], input[type="password"],
+input:not([type]), select, textarea {
+    font-family: var(--font-ui);
+    font-size: 13px;
+    color: var(--text);
+    background: var(--bg-1);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    padding: 7px 10px;
+    transition: border-color var(--ease), background var(--ease);
+}
+input::placeholder, textarea::placeholder { color: var(--text-faint); }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); background: var(--bg-0); }
+select option { background: var(--bg-2); color: var(--text); }
+
+input[type="range"] { accent-color: var(--accent); }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+input[type="color"] {
+    background: var(--bg-1); border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm); padding: 2px; cursor: pointer;
+}
+
+a { color: var(--accent); }
+a:hover { color: var(--accent-hover); }

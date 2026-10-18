@@ -9,9 +9,9 @@
     html, body {
       margin: 0; padding: 0;
       width: 100%; height: 100%;
-      background: #1a1a1a;
-      color: #f0e68c;
-      font-family: 'RS-Plain', sans-serif;
+      background: var(--bg-0);
+      color: var(--text);
+      font-family: var(--font-ui);
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -21,42 +21,42 @@
     .yt-top {
       flex: 0 0 auto;
       padding: 8px 8px 4px;
-      border-bottom: 1px solid #8b6914;
-      background: #1a1a1a;
+      border-bottom: 1px solid var(--accent);
+      background: var(--bg-0);
     }
     .yt-header {
       display: flex; align-items: center; gap: 4px; margin-bottom: 6px;
     }
     .yt-header-title {
-      font-family: 'RS-Bold', sans-serif; font-size: 14px;
-      color: #f0e68c; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); flex: 1;
+      font-family: var(--font-ui); font-size: 14px;
+      color: var(--text);  flex: 1;
     }
     .yt-icon-btn {
-      background: url('assets/button.jpg') repeat; background-size: cover;
-      border: 2px outset #8b6914; border-radius: 4px; color: #f0e68c;
+      background: var(--bg-2); background-size: cover;
+      border: 1px solid var(--line-strong); border-radius: 4px; color: var(--text);
       font-size: 13px; cursor: pointer; width: 26px; height: 26px;
       display: flex; align-items: center; justify-content: center;
       transition: all 0.1s; flex-shrink: 0;
     }
-    .yt-icon-btn:hover { border: 2px inset #8b6914; transform: translateY(1px); }
+    .yt-icon-btn:hover { border: 1px solid var(--accent-line); transform: translateY(1px); }
     .yt-icon-btn.spinning { animation: spin 1s linear infinite; }
     @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
 
     .yt-add-row { display: flex; gap: 4px; margin-bottom: 4px; }
     .yt-add-row input {
       flex: 1; padding: 5px 8px; border-radius: 4px;
-      border: 1px solid #8b6914; background: #2a2a2a; color: #f0e68c;
-      font-family: 'RS-Plain', sans-serif; font-size: 12px; min-width: 0;
+      border: 1px solid var(--accent); background: var(--bg-2); color: var(--text);
+      font-family: var(--font-ui); font-size: 12px; min-width: 0;
     }
     .yt-add-row input::placeholder { color: #888; }
-    .yt-add-row input:focus { outline: none; border-color: #c8941c; }
+    .yt-add-row input:focus { outline: none; border-color: var(--accent); }
     .yt-add-btn {
-      background: url('assets/button.jpg') repeat; background-size: cover;
-      border: 2px outset #8b6914; border-radius: 4px; color: #f0e68c;
-      font-family: 'RS-Bold', sans-serif; font-size: 12px; cursor: pointer;
+      background: var(--bg-2); background-size: cover;
+      border: 1px solid var(--line-strong); border-radius: 4px; color: var(--text);
+      font-family: var(--font-ui); font-size: 12px; cursor: pointer;
       padding: 0 10px; white-space: nowrap; transition: all 0.1s;
     }
-    .yt-add-btn:hover { border: 2px inset #8b6914; transform: translateY(1px); }
+    .yt-add-btn:hover { border: 1px solid var(--accent-line); transform: translateY(1px); }
     .yt-hint { font-size: 10px; color: #666; padding: 0 2px 2px; }
 
     /* ── Channels container — flex column, slots push each other ── */
@@ -78,7 +78,7 @@
       display: flex;
       flex-direction: column;
       min-height: 0;
-      border-bottom: 1px solid #2a2a2a;
+      border-bottom: 1px solid var(--bg-2);
       transition: flex 0.2s ease;
     }
     .yt-slot:last-child { border-bottom: none; }
@@ -90,7 +90,7 @@
       flex: 0 0 auto;
       display: flex; align-items: center; gap: 8px;
       padding: 7px 10px;
-      background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+      background: linear-gradient(135deg, var(--bg-2) 0%, #1e1e1e 100%);
       cursor: pointer; user-select: none;
       border-left: 4px solid transparent; /* status colour here */
       transition: border-color 0.3s;
@@ -103,30 +103,30 @@
 
     .yt-channel-avatar-placeholder {
       width: 28px; height: 28px; border-radius: 50%;
-      border: 1px solid #8b6914;
-      background: linear-gradient(135deg, #8b6914, #5a4500);
+      border: 1px solid var(--accent);
+      background: linear-gradient(135deg, var(--accent), #5a4500);
       flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-      font-size: 14px; font-family: 'RS-Bold', sans-serif; color: #f0e68c;
+      font-size: 14px; font-family: var(--font-ui); color: var(--text);
     }
     .yt-channel-avatar-img {
       width: 28px; height: 28px; border-radius: 50%;
-      border: 1px solid #8b6914; flex-shrink: 0; object-fit: cover;
+      border: 1px solid var(--accent); flex-shrink: 0; object-fit: cover;
     }
     .yt-channel-info { flex: 1; min-width: 0; }
     .yt-channel-name {
-      font-family: 'RS-Bold', sans-serif; font-size: 13px; color: #fff;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+      font-family: var(--font-ui); font-size: 13px; color: #fff;
+      
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .yt-live-badge {
       display: inline-flex; align-items: center; gap: 4px;
-      font-size: 10px; font-family: 'RS-Bold', sans-serif; margin-top: 2px;
+      font-size: 10px; font-family: var(--font-ui); margin-top: 2px;
     }
     .yt-live-badge.live    { color: #2ecc40; }
     .yt-live-badge.offline { color: #888; }
     .yt-live-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .live    .yt-live-dot { background: #2ecc40; animation: livepulse 1.2s ease-in-out infinite; }
-    .offline .yt-live-dot { background: #555; }
+    .offline .yt-live-dot { background: var(--line-strong); }
     @keyframes livepulse {
       0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(46,204,64,0.5); }
       50%      { opacity:0.7; box-shadow:0 0 0 4px rgba(46,204,64,0); }
@@ -134,12 +134,12 @@
 
     .yt-header-btns { display: flex; gap: 4px; flex-shrink: 0; }
     .yt-sm-btn {
-      background: url('assets/button.jpg') repeat; background-size: cover;
-      border: 2px outset #8b6914; border-radius: 3px; color: #f0e68c;
-      font-family: 'RS-Plain', sans-serif; font-size: 10px; cursor: pointer;
+      background: var(--bg-2); background-size: cover;
+      border: 1px solid var(--line-strong); border-radius: 3px; color: var(--text);
+      font-family: var(--font-ui); font-size: 10px; cursor: pointer;
       padding: 3px 7px; transition: all 0.1s; white-space: nowrap;
     }
-    .yt-sm-btn:hover  { border: 2px inset #8b6914; transform: translateY(1px); }
+    .yt-sm-btn:hover  { border: 1px solid var(--accent-line); transform: translateY(1px); }
     .yt-sm-btn:active { transform: translateY(2px); }
     .yt-sm-btn.del { background: linear-gradient(135deg,#4a2020,#2a0000); border-color:#882222; color:#ff9999; }
     .yt-sm-btn.del:hover { background: linear-gradient(135deg,#662222,#400000); }
@@ -161,10 +161,10 @@
     .yt-slot.collapsed .yt-channel-body { display: none; }
 
     /* ── Live section ── */
-    .yt-live-section { padding: 8px 10px; border-bottom: 1px solid #2a2a2a; }
+    .yt-live-section { padding: 8px 10px; border-bottom: 1px solid var(--bg-2); }
     .yt-live-thumb {
       position: relative; width: 100%; aspect-ratio: 16/9;
-      border-radius: 4px; overflow: hidden; background: #111; cursor: pointer; margin-bottom: 6px;
+      border-radius: 4px; overflow: hidden; background: var(--bg-1); cursor: pointer; margin-bottom: 6px;
     }
     .yt-live-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
     .yt-live-thumb-overlay {
@@ -178,10 +178,10 @@
     }
     .yt-live-label {
       position:absolute; top:6px; left:6px; background:#ff0000; color:#fff;
-      font-family:'RS-Bold',sans-serif; font-size:10px; padding:2px 6px; border-radius:3px;
+      font-family: var(--font-ui); font-size:10px; padding:2px 6px; border-radius:3px;
     }
     .yt-live-title {
-      font-size:11px; color:#f0e68c; line-height:1.3;
+      font-size:11px; color:var(--text); line-height:1.3;
       display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
     }
     .yt-live-btn-row { display:flex; gap:4px; margin-top:6px; }
@@ -192,23 +192,23 @@
     /* ── Videos ── */
     .yt-videos-section { padding: 6px 10px 8px; }
     .yt-section-label {
-      font-size:10px; color:#8b6914; font-family:'RS-Bold',sans-serif;
+      font-size:10px; color:var(--accent); font-family: var(--font-ui);
       text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;
     }
     .yt-video-item {
       display:flex; gap:8px; padding:5px 0;
-      border-bottom:1px solid #2a2a2a; cursor:pointer;
+      border-bottom:1px solid var(--bg-2); cursor:pointer;
       transition:background 0.1s; border-radius:3px;
     }
     .yt-video-item:last-child { border-bottom:none; }
     .yt-video-item:hover { background:rgba(139,105,20,0.1); }
     .yt-video-thumb {
       width:72px; height:40px; border-radius:3px; object-fit:cover;
-      flex-shrink:0; background:#111; border:1px solid #333;
+      flex-shrink:0; background:var(--bg-1); border:1px solid #333;
     }
     .yt-video-info { flex:1; min-width:0; display:flex; flex-direction:column; justify-content:center; }
     .yt-video-title {
-      font-size:11px; color:#f0e68c;
+      font-size:11px; color:var(--text);
       display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
       overflow:hidden; line-height:1.3;
     }
@@ -218,8 +218,8 @@
     .yt-empty { text-align:center; padding:20px 12px; color:#666; font-size:12px; line-height:1.6; }
     .yt-empty-icon { font-size:28px; display:block; margin-bottom:8px; }
     .yt-status-bar {
-      flex: 0 0 auto; font-size:10px; color:#555; text-align:center;
-      padding:3px; border-top:1px solid #2a2a2a; background:#1a1a1a;
+      flex: 0 0 auto; font-size:10px; color:var(--line-strong); text-align:center;
+      padding:3px; border-top:1px solid var(--bg-2); background:var(--bg-0);
     }
   </style>
 </head>
@@ -227,7 +227,7 @@
 
 <div class="yt-top">
   <div class="yt-header">
-    <button class="yt-icon-btn" onclick="goBackToNav()" style="background:transparent;border-color:#555;color:#aaa;">&#8592;</button>
+    <button class="yt-icon-btn" onclick="goBackToNav()" style="background:transparent;border-color:var(--line-strong);color:#aaa;">&#8592;</button>
     <span class="yt-header-title" style="text-align:center;">Creators</span>
     <button class="yt-icon-btn" id="refresh-btn" title="Refresh all" onclick="refreshAll()">↻</button>
   </div>

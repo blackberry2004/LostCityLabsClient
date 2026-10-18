@@ -906,7 +906,7 @@ function refreshSoundList() {
         
         // Add "Default (No Sound)" option
         const defaultBtn = document.createElement('div');
-        defaultBtn.style.cssText = 'padding: 6px; background: ' + (customSoundPath === '' ? '#3a5a3a' : '#2a2a2a') + '; border: 1px solid #555; border-radius: 2px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 10px; color: #f0e68c;';
+        defaultBtn.style.cssText = 'padding: 6px; background: ' + (customSoundPath === '' ? '#3a5a3a' : 'var(--bg-2)') + '; border: 1px solid var(--line-strong); border-radius: 2px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--text);';
         defaultBtn.innerHTML = '<span style="flex: 1;">Default (No Sound)</span>';
         defaultBtn.onclick = () => {
             customSoundPath = '';
@@ -922,7 +922,7 @@ function refreshSoundList() {
             const isActive = customSoundPath === fullPath;
             
             const btn = document.createElement('div');
-            btn.style.cssText = 'padding: 6px; background: ' + (isActive ? '#3a5a3a' : '#2a2a2a') + '; border: 1px solid #555; border-radius: 2px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 10px; color: #f0e68c;';
+            btn.style.cssText = 'padding: 6px; background: ' + (isActive ? '#3a5a3a' : 'var(--bg-2)') + '; border: 1px solid var(--line-strong); border-radius: 2px; cursor: pointer; display: flex; align-items: center; gap: 4px; font-size: 10px; color: var(--text);';
             
             const deleteBtn = document.createElement('button');
             deleteBtn.textContent = 'Delete';

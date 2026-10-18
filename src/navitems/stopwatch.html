@@ -3,29 +3,24 @@
 <head>
     <link rel="stylesheet" type="text/css" href="../main.css" />
     <style>
-        @font-face {
-            font-family: 'RS-Quill';
-            src: url('../assets/fonts/RuneScape-Quill-8.otf') format('opentype');
-        }
-
         #stopwatch-display-container {
-            background: rgba(0, 0, 0, 0.6);
-            border: 2px solid #666;
-            border-radius: 6px;
-            padding: 12px;
+            background: var(--bg-2);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 16px 12px 12px;
             margin: 12px 0;
             text-align: center;
         }
 
         #stopwatch-timer-display {
-            font-family: 'RS-Bold', monospace;
-            font-size: 48px;
-            font-weight: bold;
+            font-family: var(--font-mono);
+            font-size: 44px;
+            font-weight: 600;
             color: #00ff00;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9), -1px -1px 2px rgba(0, 0, 0, 0.5);
-            letter-spacing: 2px;
-            margin: 0 0 10px 0;
-            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            font-variant-numeric: tabular-nums;
+            margin: 0 0 14px 0;
+            transition: color 0.3s ease;
         }
 
         #stopwatch-timer-display.flash-red {
@@ -44,29 +39,27 @@
 
         #stopwatch-control-buttons button {
             flex: 1;
-            padding: 8px 12px;
-            background: url('../assets/button.jpg') repeat;
-            background-size: cover;
-            border: 2px outset #8b6914;
-            border-radius: 4px;
-            color: #f0e68c;
-            font-weight: bold;
-            font-size: 12px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-            cursor: pointer;
-            transition: all 0.1s ease;
         }
 
-        #stopwatch-control-buttons button:hover {
-            border: 2px inset #8b6914;
-            background-color: rgba(139, 105, 20, 0.3);
-            transform: translateY(1px);
+        #stopwatch-start-btn {
+            color: var(--on-accent);
+            background: var(--accent);
+            border-color: var(--accent);
         }
 
-        #stopwatch-control-buttons button:active {
-            border: 2px inset #8b6914;
-            transform: translateY(2px);
+        #stopwatch-start-btn:hover {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
         }
+
+        .hint {
+            font-size: 11px;
+            color: var(--text-faint);
+        }
+
+        .inline-input { width: 80px; text-align: center; }
+        .btn-row { display: flex; gap: 6px; }
+        .btn-row button { flex: 1; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -98,8 +91,8 @@
             
             <div class="setting-row">
                 <label>Set Time:</label>
-                <input type="text" id="countdown-time" value="90" placeholder="90 or 1:30" style="width: 80px; padding: 4px 6px; background: #2a2a2a; border: 2px solid #8b6914; border-radius: 3px; color: #f0e68c; font-family: 'RS-Plain', sans-serif; font-size: 12px; text-align: center;">
-                <span style="font-family: 'RS-Plain', sans-serif; font-size: 10px; color: #b8a060;">(seconds or mm:ss)</span>
+                <input type="text" id="countdown-time" value="90" placeholder="90 or 1:30" class="inline-input">
+                <span class="hint">(seconds or mm:ss)</span>
             </div>
         </div>
 
@@ -118,7 +111,7 @@
 
             <div class="setting-row" id="afk-input-type-row" style="display: none;">
                 <label>Input Type:</label>
-                <select id="afk-input-type-select" style="padding: 4px 6px; background: #2a2a2a; border: 2px solid #8b6914; border-radius: 3px; color: #f0e68c; font-family: 'RS-Plain', sans-serif; font-size: 12px;">
+                <select id="afk-input-type-select">
                     <option value="click">Click only</option>
                     <option value="both">Click + Keyboard</option>
                 </select>
@@ -126,8 +119,8 @@
 
             <div class="setting-row">
                 <label>Timer Duration:</label>
-                <input type="text" id="afk-duration-input" value="90" placeholder="90 or 1:30" style="width: 80px; padding: 4px 6px; background: #2a2a2a; border: 2px solid #8b6914; border-radius: 3px; color: #f0e68c; font-family: 'RS-Plain', sans-serif; font-size: 12px; text-align: center;">
-                <span style="margin-left: 4px; font-size: 10px; color: #b8a060;">(seconds or mm:ss)</span>
+                <input type="text" id="afk-duration-input" value="90" placeholder="90 or 1:30" class="inline-input">
+                <span class="hint">(seconds or mm:ss)</span>
             </div>
         </div>
 
@@ -146,7 +139,7 @@
             
             <div class="setting-row">
                 <label>Threshold:</label>
-                <input type="number" id="alert-threshold-input" min="1" max="89" value="10" style="width: 60px; padding: 4px 6px; background: #2a2a2a; border: 2px solid #8b6914; border-radius: 3px; color: #f0e68c; font-family: 'RS-Plain', sans-serif; font-size: 12px; text-align: center;">
+                <input type="number" id="alert-threshold-input" min="1" max="89" value="10" class="inline-input">
                 <span style="margin-left: 4px;">seconds</span>
             </div>
             
@@ -160,11 +153,11 @@
             
             <div class="setting-row">
                 <label>Custom Sound:</label>
-                <div style="display: flex; gap: 4px;">
-                    <button onclick="document.getElementById('custom-sound-input').click();" style="flex: 1; padding: 8px; background: url('../assets/button.jpg') repeat; background-size: cover; border: 2px outset #8b6914; border-radius: 3px; color: #f0e68c; font-weight: bold; font-size: 11px; cursor: pointer; font-family: 'RS-Quill', monospace; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); transition: all 0.1s ease;" onmouseover="this.style.border='2px inset #8b6914'; this.style.backgroundColor='rgba(139, 105, 20, 0.3)'; this.style.transform='translateY(1px)';" onmouseout="this.style.border='2px outset #8b6914'; this.style.backgroundColor=''; this.style.transform='';">Add Sound</button>
-                    <button onclick="openSoundManager();" style="flex: 1; padding: 8px; background: url('../assets/button.jpg') repeat; background-size: cover; border: 2px outset #8b6914; border-radius: 3px; color: #f0e68c; font-weight: bold; font-size: 11px; cursor: pointer; font-family: 'RS-Quill', monospace; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8); transition: all 0.1s ease;" onmouseover="this.style.border='2px inset #8b6914'; this.style.backgroundColor='rgba(139, 105, 20, 0.3)'; this.style.transform='translateY(1px)';" onmouseout="this.style.border='2px outset #8b6914'; this.style.backgroundColor=''; this.style.transform='';">Manage</button>
+                <div class="btn-row">
+                    <button onclick="document.getElementById('custom-sound-input').click();">Add Sound</button>
+                    <button onclick="openSoundManager();">Manage</button>
                 </div>
-                <span id="custom-sound-label" style="font-size: 10px; color: #b8a060; margin-top: 4px;">No custom sound</span>
+                <span id="custom-sound-label" class="hint">No custom sound</span>
             </div>
             <input type="file" id="custom-sound-input" accept="audio/*" style="display: none;">
             
